@@ -287,7 +287,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     gap: '1.5rem',
                 },
                 767: {
-                    perPage: 1,
+                    perPage: 2,
                     gap: '1rem',
                 },
             },
