@@ -714,7 +714,7 @@ select {
 
 @media screen and (max-width: 767px) {
     #testimonial-carousel-1 {
-        margin-bottom: 2rem;
+        margin-bottom: 3rem;
         /* Reduced gap on mobile */
     }
 }
