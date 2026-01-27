@@ -782,4 +782,9 @@ select {
     #testimonial-carousel-2 .splide__track {
         overflow: visible !important;
     }
+
+    .testimonial-card .video-wrapper {
+        padding-bottom: 100%;
+        /* Reduce height on mobile to make it less overwhelming */
+    }
 }
