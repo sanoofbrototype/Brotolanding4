@@ -359,6 +359,22 @@ document.addEventListener("DOMContentLoaded", () => {
                 // 3. Pause ALL scrolling
                 manageAutoscroll(false);
 
+                // 4. Center the video
+                const slide = wrapper.closest('.splide__slide');
+                if (slide) {
+                    const carouselId = wrapper.closest('.splide').id;
+                    const instance = carouselId === 'testimonial-carousel-1' ? splide1 : splide2;
+                    // Use 'go' with the slide index to center it. 
+                    // Note: Splide's 'index' property on the slide element is 0-based index of clones+slides
+                    // But we can just pass the slide element reference to 'go' depending on version, 
+                    // or better, find the index.
+                    // simpler:
+                    const index = Array.from(instance.Components.Elements.slides).indexOf(slide);
+                    if (index !== -1) {
+                        instance.go(index);
+                    }
+                }
+
             } else {
                 // Pause THIS video
                 video.pause();
