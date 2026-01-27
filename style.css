@@ -764,3 +764,22 @@ select {
     /* Pause icon path */
     d: path("M6 19h4V5H6v14zm8-14v14h4V5h-4z");
 }
+
+/* Force visibility on mobile for debugging/fixing */
+@media screen and (max-width: 767px) {
+
+    .section-testimonials,
+    .section-testimonials-wrap,
+    #testimonial-carousel-1,
+    #testimonial-carousel-2 {
+        display: block !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        overflow: visible !important;
+    }
+
+    #testimonial-carousel-1 .splide__track,
+    #testimonial-carousel-2 .splide__track {
+        overflow: visible !important;
+    }
+}
