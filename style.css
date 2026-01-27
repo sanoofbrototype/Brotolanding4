@@ -687,8 +687,8 @@ select {
 .testimonial-card .video-wrapper {
     position: relative;
     width: 100%;
-    padding-bottom: 150%;
-    /* 2:3 aspect ratio for a modern card look */
+    padding-bottom: 177.78%;
+    /* 9:16 aspect ratio (Instagram Reel size) */
     background-color: #222;
 }
 
@@ -783,8 +783,8 @@ select {
         overflow: visible !important;
     }
 
-    .testimonial-card .video-wrapper {
-        padding-bottom: 100%;
-        /* Reduce height on mobile to make it less overwhelming */
+    #testimonial-carousel-1 .splide__track,
+    #testimonial-carousel-2 .splide__track {
+        overflow: visible !important;
     }
 }
