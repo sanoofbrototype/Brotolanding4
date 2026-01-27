@@ -297,8 +297,8 @@ document.addEventListener("DOMContentLoaded", () => {
             ...baseConfig,
             autoScroll: {
                 speed: 0.5,
-                pauseOnHover: true,
-                pauseOnFocus: true,
+                pauseOnHover: false, // Handle manually
+                pauseOnFocus: false, // Handle manually
             },
         });
 
@@ -306,13 +306,45 @@ document.addEventListener("DOMContentLoaded", () => {
             ...baseConfig,
             autoScroll: {
                 speed: -0.5,
-                pauseOnHover: true,
-                pauseOnFocus: true,
+                pauseOnHover: false, // Handle manually
+                pauseOnFocus: false, // Handle manually
             },
         });
 
         splide1.mount(window.splide.Extensions);
         splide2.mount(window.splide.Extensions);
+
+        // --- AutoScroll State Management ---
+        let isVideoPlaying = false;
+        let isHovering = false;
+
+        function updateAutoScrollState() {
+            const shouldPause = isVideoPlaying || isHovering;
+            const instances = [splide1, splide2];
+
+            instances.forEach(instance => {
+                if (instance.Components.AutoScroll) {
+                    if (shouldPause) {
+                        instance.Components.AutoScroll.pause();
+                    } else {
+                        instance.Components.AutoScroll.play();
+                    }
+                }
+            });
+        }
+
+        // Add manual hover listeners to common wrapper or specific carousels
+        const testimonialsWrap = document.querySelector('.section-testimonials-wrap');
+        if (testimonialsWrap) {
+            testimonialsWrap.addEventListener('mouseenter', () => {
+                isHovering = true;
+                updateAutoScrollState();
+            });
+            testimonialsWrap.addEventListener('mouseleave', () => {
+                isHovering = false;
+                updateAutoScrollState();
+            });
+        }
 
         // --- Video Playback Logic (Global across both carousels) ---
         const allVideoWrappers = document.querySelectorAll('.section-testimonials-wrap .video-wrapper');
@@ -336,7 +368,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Ended Event
                 video.addEventListener('ended', () => {
                     wrapper.classList.remove('is-playing');
-                    manageAutoscroll(true); // Resume all scrolling
+                    isVideoPlaying = false;
+                    updateAutoScrollState();
                 });
             }
         });
@@ -355,20 +388,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 // 2. Play THIS video
                 video.play();
                 wrapper.classList.add('is-playing');
-
-                // 3. Pause ALL scrolling
-                manageAutoscroll(false);
+                isVideoPlaying = true;
+                updateAutoScrollState();
 
                 // 4. Center the video
                 const slide = wrapper.closest('.splide__slide');
                 if (slide) {
                     const carouselId = wrapper.closest('.splide').id;
                     const instance = carouselId === 'testimonial-carousel-1' ? splide1 : splide2;
-                    // Use 'go' with the slide index to center it. 
-                    // Note: Splide's 'index' property on the slide element is 0-based index of clones+slides
-                    // But we can just pass the slide element reference to 'go' depending on version, 
-                    // or better, find the index.
-                    // simpler:
                     const index = Array.from(instance.Components.Elements.slides).indexOf(slide);
                     if (index !== -1) {
                         instance.go(index);
@@ -379,23 +406,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Pause THIS video
                 video.pause();
                 wrapper.classList.remove('is-playing');
-
-                // Resume ALL scrolling
-                manageAutoscroll(true);
+                isVideoPlaying = false;
+                updateAutoScrollState();
             }
-        }
-
-        function manageAutoscroll(shouldScroll) {
-            const instances = [splide1, splide2];
-            instances.forEach(instance => {
-                if (instance.Components.AutoScroll) {
-                    if (shouldScroll) {
-                        instance.Components.AutoScroll.play();
-                    } else {
-                        instance.Components.AutoScroll.pause();
-                    }
-                }
-            });
         }
     }
 });
