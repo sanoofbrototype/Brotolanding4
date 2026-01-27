@@ -267,148 +267,247 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // Testimonial Carousel Init
-// Testimonial Carousel Init
+// Custom Carousel Init (Ported from Brototypelanding)
 document.addEventListener("DOMContentLoaded", () => {
-    const carousel1 = document.querySelector("#testimonial-carousel-1");
-    const carousel2 = document.querySelector("#testimonial-carousel-2");
+    // Video Carousel Hybrid Scroll (Auto + Manual)
+    const trackContainers = document.querySelectorAll('.carousel-track-container');
 
-    if (typeof Splide !== 'undefined' && carousel1 && carousel2) {
+    trackContainers.forEach(container => {
+        const track = container.querySelector('.carousel-track');
+        // Ensure we handle the case where track might be null (defensive coding)
+        if (!track) return;
 
-        const baseConfig = {
-            type: 'loop',
-            perPage: 4,
-            gap: '2rem',
-            arrows: false,
-            pagination: true,
-            drag: true,
-            breakpoints: {
-                991: {
-                    perPage: 2,
-                    gap: '1.5rem',
-                },
-                767: {
-                    perPage: 2,
-                    gap: '1rem',
-                },
-            },
-        };
+        const isReverse = track.classList.contains('reverse-track');
 
-        const splide1 = new Splide("#testimonial-carousel-1", {
-            ...baseConfig,
-            autoScroll: {
-                speed: 0.5,
-                pauseOnHover: false, // Handle manually
-                pauseOnFocus: false, // Handle manually
-            },
-        });
+        // State for Drag/Swipe
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+        let isDragging = false;
+        let touchStartX = 0;
 
-        const splide2 = new Splide("#testimonial-carousel-2", {
-            ...baseConfig,
-            autoScroll: {
-                speed: -0.5,
-                pauseOnHover: false, // Handle manually
-                pauseOnFocus: false, // Handle manually
-            },
-        });
+        // Desktop: Continuous Marquee
+        if (window.innerWidth > 768) {
+            // Auto-scroll speed
+            const speed = 0.5; // Adjusted speed
 
-        splide1.mount(window.splide.Extensions);
-        splide2.mount(window.splide.Extensions);
+            // State
+            let isPaused = false;
+            // let animationId; // unused
 
-        // --- AutoScroll State Management ---
-        let isVideoPlaying = false;
-        let isHovering = false;
+            // Interaction Listeners
+            container.addEventListener('mouseenter', () => isPaused = true);
+            container.addEventListener('mouseleave', () => isPaused = false);
 
-        function updateAutoScrollState() {
-            const shouldPause = isVideoPlaying || isHovering;
-            const instances = [splide1, splide2];
+            function animate() {
+                if (!isPaused && container.dataset.isPlaying !== "true") {
+                    const maxScroll = container.scrollWidth / 2; // Assuming duplication
 
-            instances.forEach(instance => {
-                if (instance.Components.AutoScroll) {
-                    if (shouldPause) {
-                        instance.Components.AutoScroll.pause();
+                    if (isReverse) {
+                        container.scrollLeft -= speed;
+                        if (container.scrollLeft <= 0) {
+                            container.scrollLeft = maxScroll;
+                        }
                     } else {
-                        instance.Components.AutoScroll.play();
+                        container.scrollLeft += speed;
+                        if (container.scrollLeft >= maxScroll) {
+                            container.scrollLeft = 0;
+                        }
                     }
                 }
-            });
-        }
-
-        // Add manual hover listeners to common wrapper or specific carousels
-        const testimonialsWrap = document.querySelector('.section-testimonials-wrap');
-        if (testimonialsWrap) {
-            testimonialsWrap.addEventListener('mouseenter', () => {
-                isHovering = true;
-                updateAutoScrollState();
-            });
-            testimonialsWrap.addEventListener('mouseleave', () => {
-                isHovering = false;
-                updateAutoScrollState();
-            });
-        }
-
-        // --- Video Playback Logic (Global across both carousels) ---
-        const allVideoWrappers = document.querySelectorAll('.section-testimonials-wrap .video-wrapper');
-
-        allVideoWrappers.forEach(wrapper => {
-            const video = wrapper.querySelector('video');
-            const playBtn = wrapper.querySelector('.play-btn');
-
-            if (video && playBtn) {
-                // Play Button Click
-                playBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    toggleVideo(video, wrapper);
-                });
-
-                // Video Click
-                video.addEventListener('click', () => {
-                    toggleVideo(video, wrapper);
-                });
-
-                // Ended Event
-                video.addEventListener('ended', () => {
-                    wrapper.classList.remove('is-playing');
-                    isVideoPlaying = false;
-                    updateAutoScrollState();
-                });
+                requestAnimationFrame(animate);
             }
+
+            // Initialize Reverse Position
+            if (isReverse) {
+                setTimeout(() => {
+                    container.scrollLeft = container.scrollWidth / 2;
+                }, 100);
+            }
+            animate();
+        } else {
+            // Mobile: Snap Interval Scrolling
+            let intervalId;
+            const startMobileScroll = () => {
+                clearInterval(intervalId);
+                intervalId = setInterval(() => {
+                    // Pause if playing or user is touching/interacting
+                    if (container.dataset.isPlaying === "true" || isDown) return;
+
+                    const card = container.querySelector('.carousel-slide');
+                    if (!card) return;
+
+                    const cardWidth = card.offsetWidth;
+                    const scrollAmount = cardWidth; // Scroll 1 item
+
+                    if (isReverse) {
+                        // Start from right/middle for reverse
+                        if (container.scrollLeft <= 0) {
+                            container.scrollTo({ left: container.scrollWidth / 2, behavior: 'auto' });
+                        } else {
+                            container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+                        }
+                    } else {
+                        const maxScroll = container.scrollWidth / 2;
+                        if (container.scrollLeft >= maxScroll) {
+                            container.scrollTo({ left: 0, behavior: 'auto' });
+                        } else {
+                            container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+                        }
+                    }
+                }, 3000);
+            };
+
+            if (isReverse) {
+                setTimeout(() => {
+                    container.scrollTo({ left: container.scrollWidth / 2, behavior: 'auto' });
+                }, 100);
+            }
+
+            startMobileScroll();
+
+            // Mobile Touch Interaction to pause/resume auto-scroll AND detect swipes
+            container.addEventListener('touchstart', (e) => {
+                isDown = true;
+                touchStartX = e.touches[0].clientX;
+                isDragging = false;
+                clearInterval(intervalId);
+            }, { passive: true });
+
+            container.addEventListener('touchmove', (e) => {
+                if (Math.abs(e.touches[0].clientX - touchStartX) > 10) {
+                    isDragging = true;
+                }
+            }, { passive: true });
+
+            container.addEventListener('touchend', () => {
+                isDown = false;
+                setTimeout(startMobileScroll, 4000); // Resume after delay
+                setTimeout(() => { isDragging = false; }, 50);
+            });
+        }
+
+        // --- Drag/Manual Scroll Implementation (Mouse) ---
+        container.addEventListener('mousedown', (e) => {
+            isDown = true;
+            container.classList.add('active');
+            startX = e.pageX - container.offsetLeft;
+            scrollLeft = container.scrollLeft;
+            isDragging = false;
         });
 
-        function toggleVideo(video, wrapper) {
-            if (video.paused) {
-                // 1. Pause ALL other videos
-                allVideoWrappers.forEach(w => {
-                    const v = w.querySelector('video');
-                    if (v && v !== video && !v.paused) {
+        container.addEventListener('mouseleave', () => {
+            isDown = false;
+            container.classList.remove('active');
+        });
+
+        container.addEventListener('mouseup', () => {
+            isDown = false;
+            container.classList.remove('active');
+            setTimeout(() => {
+                // container.dataset.wasDragging = "false"; // Legacy check
+                isDragging = false;
+            }, 50);
+        });
+
+        container.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - container.offsetLeft;
+            const walk = (x - startX) * 2;
+
+            if (Math.abs(x - startX) > 5) {
+                // container.dataset.wasDragging = "true"; // Legacy check
+                isDragging = true;
+            }
+            container.scrollLeft = scrollLeft - walk;
+        });
+
+        // Click Interception (Capture Phase)
+        container.addEventListener('click', (e) => {
+            // If we determined it was a drag (via mouse or touch), stop the click
+            if (isDragging) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        }, true);
+    });
+
+    // Video Cards Click Logic
+    const videoCards = document.querySelectorAll('.video-facade-card');
+    videoCards.forEach(card => {
+        const video = card.querySelector('.story-thumb-video');
+        const playBtn = card.querySelector('.play-button-small');
+        const container = card.closest('.carousel-track-container');
+
+        if (video) {
+            const resetState = () => {
+                // When paused or ended, show default state
+                if (video.paused || video.ended) {
+                    video.controls = false;
+                    if (playBtn) playBtn.style.display = 'flex'; // Ensure flex
+                    if (container) container.dataset.isPlaying = "false";
+                }
+            };
+
+            video.addEventListener('pause', resetState);
+            video.addEventListener('ended', resetState);
+        }
+
+        card.addEventListener('click', function (e) {
+            // The container capture listener above handles drag prevention.
+            // If we are here, it's a valid click.
+
+            const video = this.querySelector('.story-thumb-video');
+            const playBtn = this.querySelector('.play-button-small');
+
+            if (video) {
+                // Pause all other videos
+                document.querySelectorAll('.story-thumb-video').forEach(v => {
+                    if (v !== video && !v.paused) {
                         v.pause();
-                        w.classList.remove('is-playing');
+                        // Reset UI for others immediately
+                        v.controls = false;
+                        const otherCard = v.closest('.story-card');
+                        const otherBtn = otherCard.querySelector('.play-button-small');
+                        if (otherBtn) otherBtn.style.display = 'flex';
                     }
                 });
 
-                // 2. Play THIS video
-                video.play();
-                wrapper.classList.add('is-playing');
-                isVideoPlaying = true;
-                updateAutoScrollState();
+                video.muted = false;
+                video.controls = true;
 
-                // 4. Center the video
-                const slide = wrapper.closest('.splide__slide');
-                if (slide) {
-                    const carouselId = wrapper.closest('.splide').id;
-                    const instance = carouselId === 'testimonial-carousel-1' ? splide1 : splide2;
-                    const index = Array.from(instance.Components.Elements.slides).indexOf(slide);
-                    if (index !== -1) {
-                        instance.go(index);
-                    }
+                // Robust Play
+                const playPromise = video.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        console.log("Auto-play prevented:", error);
+                    });
                 }
 
-            } else {
-                // Pause THIS video
-                video.pause();
-                wrapper.classList.remove('is-playing');
-                isVideoPlaying = false;
-                updateAutoScrollState();
+                if (playBtn) playBtn.style.display = 'none';
+                video.style.opacity = '1';
+
+                if (container) {
+                    container.dataset.isPlaying = "true"; // Stop auto-scroll
+
+                    // Center the card Logic (Robust)
+                    const containerRect = container.getBoundingClientRect();
+                    const cardRect = this.getBoundingClientRect();
+                    const currentScroll = container.scrollLeft;
+
+                    const relativeCardLeft = cardRect.left - containerRect.left;
+
+                    // Center generic calculation
+                    // Target = CurrentScroll + (CardRelativeLeft) - (HalfContainer) + (HalfCard)
+                    const targetScroll = currentScroll + relativeCardLeft - (containerRect.width / 2) + (cardRect.width / 2);
+
+                    container.scrollTo({
+                        left: targetScroll,
+                        behavior: 'smooth'
+                    });
+                }
             }
-        }
-    }
+        });
+    });
 });
