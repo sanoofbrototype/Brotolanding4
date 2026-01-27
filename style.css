@@ -611,6 +611,16 @@ select {
     padding-bottom: 0.5rem;
 }
 
+/* Reduce gap between portfolio heading and graphic */
+.portfolio-heading-wrap {
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+.graphic-wrapper {
+    margin-top: -2rem !important;
+}
+
 /* Footer Color Change - Restoring Original Gradient & Structure Override */
 .footer {
     background-color: transparent !important;
