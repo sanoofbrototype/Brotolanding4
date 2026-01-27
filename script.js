@@ -259,8 +259,104 @@ document.addEventListener('DOMContentLoaded', function () {
         window.intlTelInput(input, {
             initialCountry: "in",
             separateDialCode: true,
+            autoPlaceholder: "off",
             dropdownContainer: document.body,
             utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@18.1.1/build/js/utils.js"
         });
+    }
+});
+
+// Testimonial Carousel Init
+document.addEventListener("DOMContentLoaded", () => {
+    if (typeof Splide !== 'undefined' && document.querySelector("#testimonial-carousel")) {
+        const testimonialSplide = new Splide("#testimonial-carousel", {
+            type: 'loop',
+            perPage: 4,
+            gap: '2rem',
+            arrows: false,
+            pagination: true,
+            drag: true, // Ensure manual scrolling is enabled
+            // Autoscroll config
+            autoScroll: {
+                speed: 0.5,
+                pauseOnHover: true,
+                pauseOnFocus: true,
+            },
+            breakpoints: {
+                991: {
+                    perPage: 2,
+                    gap: '1.5rem',
+                },
+                767: {
+                    perPage: 2,
+                    gap: '1rem',
+                },
+            },
+        });
+
+        testimonialSplide.mount(window.splide.Extensions);
+
+        // Video Playback Logic
+        const carousel = document.querySelector("#testimonial-carousel");
+        const videoWrappers = carousel.querySelectorAll('.video-wrapper');
+
+        videoWrappers.forEach(wrapper => {
+            const video = wrapper.querySelector('video');
+            const playBtn = wrapper.querySelector('.play-btn');
+
+            if (video && playBtn) {
+                // Play Button Click
+                playBtn.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent slide click if any
+                    toggleVideo(video, wrapper);
+                });
+
+                // Video Click
+                video.addEventListener('click', () => {
+                    toggleVideo(video, wrapper);
+                });
+
+                // Ended Event
+                video.addEventListener('ended', () => {
+                    wrapper.classList.remove('is-playing');
+                    // Resume autoscroll
+                    if (testimonialSplide.Components.AutoScroll) {
+                        testimonialSplide.Components.AutoScroll.play();
+                    }
+                });
+            }
+        });
+
+        function toggleVideo(video, wrapper) {
+            if (video.paused) {
+                // Pause all other videos
+                videoWrappers.forEach(w => {
+                    const v = w.querySelector('video');
+                    if (v && v !== video && !v.paused) {
+                        v.pause();
+                        w.classList.remove('is-playing');
+                    }
+                });
+
+                // Play this video
+                video.play();
+                wrapper.classList.add('is-playing');
+
+                // Pause autoscroll
+                if (testimonialSplide.Components.AutoScroll) {
+                    testimonialSplide.Components.AutoScroll.pause();
+                }
+
+            } else {
+                // Pause this video
+                video.pause();
+                wrapper.classList.remove('is-playing');
+
+                // Resume autoscroll
+                if (testimonialSplide.Components.AutoScroll) {
+                    testimonialSplide.Components.AutoScroll.play();
+                }
+            }
+        }
     }
 });
