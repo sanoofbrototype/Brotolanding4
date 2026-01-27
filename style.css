@@ -409,6 +409,32 @@ select {
         padding-bottom: 0 !important;
         padding-top: 0.5rem !important;
     }
+
+    .footer {
+        padding-top: 1.5rem !important;
+        padding-bottom: 0.5rem !important;
+    }
+
+    .footer .padding-section-large {
+        padding-bottom: 0 !important;
+    }
+
+    .footer-wrapper,
+    .footer-content-wrap,
+    .footer-grid-wrap {
+        padding-bottom: 0 !important;
+        margin-bottom: 0 !important;
+        padding-top: 0 !important;
+        margin-top: 0 !important;
+    }
+
+    /* Reduce vertical gap between footer sections */
+    .footer-content-wrap {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem !important;
+        /* Reduced from default */
+    }
 }
 
 .brand-text {
@@ -582,7 +608,7 @@ select {
 }
 
 .padding-section-medium.is-portfolio {
-    padding-bottom: 2rem;
+    padding-bottom: 0.5rem;
 }
 
 /* Footer Color Change - Restoring Original Gradient & Structure Override */
@@ -593,7 +619,7 @@ select {
     padding-bottom: 3rem !important;
     border-top: 1px solid rgba(0, 0, 0, 0.1);
     /* Separator line */
-    padding-top: 3rem;
+    padding-top: 0.5rem !important;
     /* Add some spacing */
 }
 
