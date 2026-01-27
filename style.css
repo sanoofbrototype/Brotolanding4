@@ -581,6 +581,10 @@ select {
     margin-top: 5rem;
 }
 
+.padding-section-medium.is-portfolio {
+    padding-bottom: 2rem;
+}
+
 /* Footer Color Change - Restoring Original Gradient & Structure Override */
 .footer {
     background-color: transparent !important;

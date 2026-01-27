@@ -267,21 +267,20 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // Testimonial Carousel Init
+// Testimonial Carousel Init
 document.addEventListener("DOMContentLoaded", () => {
-    if (typeof Splide !== 'undefined' && document.querySelector("#testimonial-carousel")) {
-        const testimonialSplide = new Splide("#testimonial-carousel", {
+    const carousel1 = document.querySelector("#testimonial-carousel-1");
+    const carousel2 = document.querySelector("#testimonial-carousel-2");
+
+    if (typeof Splide !== 'undefined' && carousel1 && carousel2) {
+
+        const baseConfig = {
             type: 'loop',
             perPage: 4,
             gap: '2rem',
             arrows: false,
             pagination: true,
-            drag: true, // Ensure manual scrolling is enabled
-            // Autoscroll config
-            autoScroll: {
-                speed: 0.5,
-                pauseOnHover: true,
-                pauseOnFocus: true,
-            },
+            drag: true,
             breakpoints: {
                 991: {
                     perPage: 2,
@@ -292,22 +291,40 @@ document.addEventListener("DOMContentLoaded", () => {
                     gap: '1rem',
                 },
             },
+        };
+
+        const splide1 = new Splide("#testimonial-carousel-1", {
+            ...baseConfig,
+            autoScroll: {
+                speed: 0.5,
+                pauseOnHover: true,
+                pauseOnFocus: true,
+            },
         });
 
-        testimonialSplide.mount(window.splide.Extensions);
+        const splide2 = new Splide("#testimonial-carousel-2", {
+            ...baseConfig,
+            autoScroll: {
+                speed: -0.5,
+                pauseOnHover: true,
+                pauseOnFocus: true,
+            },
+        });
 
-        // Video Playback Logic
-        const carousel = document.querySelector("#testimonial-carousel");
-        const videoWrappers = carousel.querySelectorAll('.video-wrapper');
+        splide1.mount(window.splide.Extensions);
+        splide2.mount(window.splide.Extensions);
 
-        videoWrappers.forEach(wrapper => {
+        // --- Video Playback Logic (Global across both carousels) ---
+        const allVideoWrappers = document.querySelectorAll('.section-testimonials-wrap .video-wrapper');
+
+        allVideoWrappers.forEach(wrapper => {
             const video = wrapper.querySelector('video');
             const playBtn = wrapper.querySelector('.play-btn');
 
             if (video && playBtn) {
                 // Play Button Click
                 playBtn.addEventListener('click', (e) => {
-                    e.stopPropagation(); // Prevent slide click if any
+                    e.stopPropagation();
                     toggleVideo(video, wrapper);
                 });
 
@@ -319,18 +336,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Ended Event
                 video.addEventListener('ended', () => {
                     wrapper.classList.remove('is-playing');
-                    // Resume autoscroll
-                    if (testimonialSplide.Components.AutoScroll) {
-                        testimonialSplide.Components.AutoScroll.play();
-                    }
+                    manageAutoscroll(true); // Resume all scrolling
                 });
             }
         });
 
         function toggleVideo(video, wrapper) {
             if (video.paused) {
-                // Pause all other videos
-                videoWrappers.forEach(w => {
+                // 1. Pause ALL other videos
+                allVideoWrappers.forEach(w => {
                     const v = w.querySelector('video');
                     if (v && v !== video && !v.paused) {
                         v.pause();
@@ -338,25 +352,34 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 });
 
-                // Play this video
+                // 2. Play THIS video
                 video.play();
                 wrapper.classList.add('is-playing');
 
-                // Pause autoscroll
-                if (testimonialSplide.Components.AutoScroll) {
-                    testimonialSplide.Components.AutoScroll.pause();
-                }
+                // 3. Pause ALL scrolling
+                manageAutoscroll(false);
 
             } else {
-                // Pause this video
+                // Pause THIS video
                 video.pause();
                 wrapper.classList.remove('is-playing');
 
-                // Resume autoscroll
-                if (testimonialSplide.Components.AutoScroll) {
-                    testimonialSplide.Components.AutoScroll.play();
-                }
+                // Resume ALL scrolling
+                manageAutoscroll(true);
             }
+        }
+
+        function manageAutoscroll(shouldScroll) {
+            const instances = [splide1, splide2];
+            instances.forEach(instance => {
+                if (instance.Components.AutoScroll) {
+                    if (shouldScroll) {
+                        instance.Components.AutoScroll.play();
+                    } else {
+                        instance.Components.AutoScroll.pause();
+                    }
+                }
+            });
         }
     }
 });
