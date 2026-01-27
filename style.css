@@ -708,6 +708,17 @@ select {
     transition: opacity 0.3s ease, background 0.3s ease;
 }
 
+#testimonial-carousel-1 {
+    margin-bottom: 4rem;
+}
+
+@media screen and (max-width: 767px) {
+    #testimonial-carousel-1 {
+        margin-bottom: 2rem;
+        /* Reduced gap on mobile */
+    }
+}
+
 #testimonial-carousel .splide__arrow:hover {
     opacity: 1;
     background: #fff;
