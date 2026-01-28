@@ -15,240 +15,79 @@ window.addEventListener('DOMContentLoaded', (event) => {
     metaTag.setAttribute('content', canonicalURL);
 });
 
-// Splide Init
-document.addEventListener("DOMContentLoaded", () => {
-    // Check if Splide exists to avoid errors
-    if (typeof Splide !== 'undefined' && document.querySelector("#logos")) {
-        new Splide("#logos", {
-            autoWidth: true,
-            arrows: false,
-            pagination: false,
-            focus: 'center',
-            direction: 'ltr',
-            gap: '2rem',
-            type: 'loop',
-
-            autoScroll: {
-                autoStart: true,
-                speed: 0.4,
-            },
-            intersection: {
-                inView: {
-                    autoScroll: true,
-                },
-                outView: {
-                    autoScroll: false,
-                },
-            }
-        }).mount(window.splide.Extensions);
-    }
-});
 
 // GSAP Animations
 document.addEventListener("DOMContentLoaded", () => {
     if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
         gsap.registerPlugin(ScrollTrigger);
 
-        const triggerSelector = ".trigger";
-        // Check if trigger element exists
-        if (document.querySelector(triggerSelector)) {
-            const items = gsap.utils.toArray(".item");
-            const indicators = gsap.utils.toArray(".indicator");
-            const indicatorProgress = indicators.map(ind => ind.querySelector(".indicator-progress"));
+        // Programs Section Rotary Animation
+        const section = document.querySelector(".section-portfolio");
+        if (section) {
+            const trigger = section.querySelector(".trigger");
+            if (trigger) {
+                const items = gsap.utils.toArray(".item", section);
+                const indicators = gsap.utils.toArray(".indicator", section);
+                const indicatorProgress = indicators.map(ind => ind.querySelector(".indicator-progress"));
+                const isMobile = window.matchMedia("(max-width: 991px)").matches;
 
-            // Define the percentage ranges for each item (as [start%, end%])
-            const desktopRanges = [
-                [0, 35],
-                [8, 43],
-                [16, 51],
-                [24, 59],
-                [32, 67],
-                [40, 75],
-                [48, 83],
-                [56, 91],
-                [64, 99],
-                [72, 107]
-            ];
-
-            const mobileRanges = [
-                [0, 25],
-                [8, 33],
-                [16, 41],
-                [24, 49],
-                [32, 57],
-                [40, 65],
-                [48, 73],
-                [56, 81],
-                [64, 89],
-                [72, 97]
-            ];
-
-            // Detect mobile device (adjust the breakpoint as needed)
-            const isMobile = window.matchMedia("(max-width: 991px)").matches;
-            const ranges = isMobile ? mobileRanges : desktopRanges;
-
-            // Keyframes helper for "flat-fade-flat"
-            function getOpacityKeyframes() {
-                return [
-                    { opacity: 0.3, duration: 0.4 },  // 0-40%
-                    { opacity: 1, duration: 0.1 },    // 40-50%
-                    { opacity: 0.3, duration: 0.1 },  // 50-60%
-                    { opacity: 0.3, duration: 0.4 }   // 60-100%
+                // Programs: 10 items
+                const desktopRanges = [
+                    [0, 35], [8, 43], [16, 51], [24, 59], [32, 67],
+                    [40, 75], [48, 83], [56, 91], [64, 99], [72, 107]
                 ];
-            }
-
-            // Keyframes helper for mobile (fades background programs completely)
-            function getMobileOpacityKeyframes() {
-                return [
-                    { opacity: 0, duration: 0.4 },    // 0-40%
-                    { opacity: 1, duration: 0.1 },    // 40-50%
-                    { opacity: 0, duration: 0.1 },    // 50-60%
-                    { opacity: 0, duration: 0.4 }     // 60-100%
+                const mobileRanges = [
+                    [0, 25], [8, 33], [16, 41], [24, 49], [32, 57],
+                    [40, 65], [48, 73], [56, 81], [64, 89], [72, 97]
                 ];
-            }
+                const ranges = isMobile ? mobileRanges : desktopRanges;
 
-            // Animate each .item as before
-            items.forEach((item, i) => {
-                if (ranges[i]) {
-                    const [startPercent, endPercent] = ranges[i];
-                    // Always use the "0 opacity" keyframes (previously mobile-only)
-                    // to ensure background programs are fully faded out on all devices.
-                    const keyframes = getMobileOpacityKeyframes();
-                    const baseOpacity = 0;
+                function getMobileOpacityKeyframes() {
+                    return [{ opacity: 0, duration: 0.4 }, { opacity: 1, duration: 0.1 }, { opacity: 0, duration: 0.1 }, { opacity: 0, duration: 0.4 }];
+                }
 
-                    gsap.fromTo(item,
-                        { rotate: 90, opacity: baseOpacity },
-                        {
+                items.forEach((item, i) => {
+                    if (ranges[i]) {
+                        const [startPercent, endPercent] = ranges[i];
+                        gsap.fromTo(item, { rotate: 90, opacity: 0 }, {
                             rotate: -90,
-                            keyframes: keyframes,
+                            keyframes: getMobileOpacityKeyframes(),
                             ease: "none",
                             scrollTrigger: {
-                                trigger: triggerSelector,
+                                trigger: trigger,
                                 scrub: true,
                                 start: `top+=${startPercent}% bottom`,
                                 end: `top+=${endPercent}% top`
                             }
-                        }
-                    );
-                }
-            });
-
-            // ===== Indicator fill logic: sequential, filling between 25%–75% scroll =====
-            ScrollTrigger.create({
-                trigger: triggerSelector,
-                scrub: true,
-                start: "top bottom",
-                end: "bottom top",
-                onUpdate: self => {
-                    let scrollProgress = self.progress; // 0–1 over full .trigger scroll
-                    let min = 0.15;
-                    let max = 0.85;
-                    let normalized = (scrollProgress - min) / (max - min); // 0–1 within [25%, 75%]
-                    normalized = Math.max(0, Math.min(1, normalized));     // clamp
-
-                    const INDICATOR_COUNT = indicators.length;
-                    const SEGMENT = 1 / INDICATOR_COUNT;
-
-                    indicators.forEach((ind, i) => {
-                        const start = i * SEGMENT;
-                        const end = (i + 1) * SEGMENT;
-                        let progress = (normalized - start) / SEGMENT;
-                        progress = Math.max(0, Math.min(1, progress));
-
-                        // Only show the baseline 20% once active
-                        const barWidth = progress > 0 ? (20 + progress * 80) : 0;
-
-                        gsap.to(indicatorProgress[i], {
-                            width: `${barWidth}%`,
-                            duration: 0.1,
-                            overwrite: true,
-                            ease: "power1.out"
                         });
+                    }
+                });
 
-                        ind.classList.toggle("is-active", progress > 0 && progress < 1);
-                    });
-                }
-            });
-        }
-
-        // Footer Color Animation
-        if (document.querySelector(".footer") && document.querySelector(".footer-color")) {
-            gsap.set(".footer-color", { opacity: 0, yPercent: 30 });
-            gsap.to(".footer-color", {
-                opacity: 1,
-                yPercent: 0,
-                ease: "none",
-                scrollTrigger: {
-                    markers: false,
-                    trigger: ".footer",
+                ScrollTrigger.create({
+                    trigger: trigger,
+                    scrub: true,
                     start: "top bottom",
-                    end: "bottom bottom",
-                    scrub: 2,
-                    invalidateOnRefresh: true,
-                }
-            });
-        }
-    }
-});
-
-
-
-// Modal Logic
-document.addEventListener('DOMContentLoaded', function () {
-    const modal = document.getElementById('cta-modal');
-    // Select all trigger buttons by class instead of ID
-    const triggerBtns = document.querySelectorAll('.trigger-cta-modal');
-    const closeBtn = document.querySelector('.close-modal');
-    const form = document.getElementById('career-path-form');
-
-    if (modal && triggerBtns.length > 0 && closeBtn) {
-        // Open Modal for each trigger button
-        triggerBtns.forEach(btn => {
-            btn.addEventListener('click', function (e) {
-                e.preventDefault();
-                modal.style.display = 'flex';
-                document.body.style.overflow = 'hidden'; // Prevent scrolling
-            });
-        });
-
-        // Close Modal
-        closeBtn.addEventListener('click', function () {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto'; // Restore scrolling
-        });
-
-        // Close on Outside Click
-        window.addEventListener('click', function (e) {
-            if (e.target === modal) {
-                modal.style.display = 'none';
-                document.body.style.overflow = 'auto';
+                    end: "bottom top",
+                    onUpdate: self => {
+                        let scrollProgress = self.progress;
+                        let min = 0.15, max = 0.85;
+                        let normalized = (scrollProgress - min) / (max - min);
+                        normalized = Math.max(0, Math.min(1, normalized));
+                        const SEGMENT = 1 / indicators.length;
+                        indicators.forEach((ind, i) => {
+                            const start = i * SEGMENT;
+                            let progress = (normalized - start) / SEGMENT;
+                            progress = Math.max(0, Math.min(1, progress));
+                            const barWidth = progress > 0 ? (20 + progress * 80) : 0;
+                            if (indicatorProgress[i]) {
+                                gsap.to(indicatorProgress[i], { width: `${barWidth}%`, duration: 0.1, overwrite: true, ease: "power1.out" });
+                            }
+                            ind.classList.toggle("is-active", progress > 0 && progress < 1);
+                        });
+                    }
+                });
             }
-        });
-
-        // Form Submit
-        if (form) {
-            form.addEventListener('submit', function (e) {
-                e.preventDefault();
-                // Gather Data (for demo purposes logging to console)
-                const formData = new FormData(form);
-                const data = {};
-                formData.forEach((value, key) => data[key] = value);
-
-
-                alert('Thank you! Our career expert will contact you shortly.');
-                form.reset();
-                modal.style.display = 'none';
-                document.body.style.overflow = 'auto';
-            });
         }
-
-        // Trigger on First Scroll
-        const onFirstScroll = () => {
-            modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-            window.removeEventListener('scroll', onFirstScroll);
-        };
-        window.addEventListener('scroll', onFirstScroll);
     }
 });
 
@@ -263,6 +102,58 @@ document.addEventListener('DOMContentLoaded', function () {
             dropdownContainer: document.body,
             utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@18.1.1/build/js/utils.js"
         });
+    }
+});
+
+// CTA Modal Logic
+document.addEventListener('DOMContentLoaded', function () {
+    const modal = document.getElementById('cta-modal');
+    const triggerBtns = document.querySelectorAll('.trigger-cta-modal');
+    const closeBtn = document.querySelector('.close-modal');
+    const form = document.getElementById('career-path-form');
+
+    if (modal && triggerBtns.length > 0 && closeBtn) {
+        // Open Modal
+        triggerBtns.forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        // Close Modal
+        closeBtn.addEventListener('click', function () {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+
+        // Close on Outside Click
+        window.addEventListener('click', function (e) {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Form Submit
+        if (form) {
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                alert('Thank you! Our career expert will contact you shortly.');
+                form.reset();
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+        }
+
+        // Trigger on First Scroll
+        const onFirstScroll = () => {
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            window.removeEventListener('scroll', onFirstScroll);
+        };
+        window.addEventListener('scroll', onFirstScroll);
     }
 });
 

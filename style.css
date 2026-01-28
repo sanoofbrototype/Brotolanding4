@@ -53,6 +53,7 @@
     font-feature-settings: "ss01" on !important;
 }
 
+
 .indicator {
     transition: width 0.4s cubic-bezier(0.7, 0, 0.3, 1), background 0.4s, border-radius 0.4s;
 }
@@ -712,7 +713,6 @@ select {
     margin: 20px auto;
     display: flex;
     align-items: center;
-    justify-content: center;
 }
 
 .carousel-container.second-row {
@@ -855,3 +855,302 @@ select {
         width: max-content;
     }
 }
+
+/* Guarantee Section Styles */
+.section-guarantee {
+    background-color: #ffffff;
+    /* Clean white background to make text readable */
+    color: black;
+}
+
+.section-guarantee .overlay-vertical,
+.section-guarantee .overlay-circle,
+.section-guarantee .overlay-horizontal {
+    display: none !important;
+}
+
+.guarantee-grid {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 4rem;
+    align-items: center;
+    padding-left: 10rem;
+}
+
+.youtube-embed-wrapper {
+    position: relative;
+    padding-bottom: 56.25%;
+    /* 16:9 Aspect Ratio */
+    height: 0;
+    overflow: hidden;
+    border-radius: 4px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.youtube-embed-wrapper:hover {
+    transform: scale(1.02);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.youtube-embed-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.guarantee-heading {
+    font-size: 3rem;
+    line-height: 1.1;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(90deg, #1E468C, #AA87FA);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.guarantee-subtext {
+    font-size: 1.125rem;
+    line-height: 1.5;
+    color: black;
+    /* Changed from #ccc to black per user request */
+    margin-bottom: 2rem;
+    max-width: 90%;
+}
+
+
+
+@media screen and (max-width: 991px) {
+    .guarantee-grid {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+        padding-left: 0;
+    }
+
+    .guarantee-heading {
+        font-size: 2.5rem;
+    }
+}
+
+@media screen and (max-width: 479px) {
+    .guarantee-grid {
+        gap: 2rem;
+    }
+}
+
+
+.carousel-slide {
+    position: relative;
+    width: 300px;
+    /* Adjusted slightly for mobile fitting if needed, reference was 340px */
+    height: 100%;
+    flex-shrink: 0;
+    padding: 0 10px;
+}
+
+/* Video Card Styles */
+.story-card {
+    background: rgba(20, 20, 20, 0.6);
+    /* Fallback */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    width: 100%;
+    aspect-ratio: 9/16;
+    /* Enforce 9:16 */
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    backdrop-filter: blur(5px);
+    display: flex;
+    flex-direction: column;
+}
+
+.story-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(162, 33, 1, 0.703);
+}
+
+.story-thumb-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.story-card:hover .story-thumb-video {
+    opacity: 1;
+}
+
+.play-button-small {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    opacity: 0.9;
+    z-index: 10;
+    pointer-events: none;
+    /* Let clicks pass through to the card/video wrapper */
+}
+
+.story-card:hover .play-button-small {
+    transform: translate(-50%, -50%) scale(1.1);
+    background: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    opacity: 1;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .carousel-slide {
+        width: 50vw;
+        /* Show 2 items per row */
+        padding: 0 5px;
+    }
+
+    .carousel-container {
+        margin: 10px auto;
+    }
+
+    .carousel-container.second-row {
+        margin-top: 2rem;
+        /* Gap between rows */
+    }
+
+    .story-card:hover {
+        transform: none;
+        /* Disable hover jump on mobile */
+    }
+
+    .carousel-track-container {
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+        pointer-events: auto;
+    }
+
+    .carousel-track {
+        display: flex;
+        width: max-content;
+    }
+}
+
+/* Guarantee Section Styles */
+.section-guarantee {
+    background-color: #ffffff;
+    /* Clean white background to make text readable */
+    color: black;
+}
+
+.section-guarantee .overlay-vertical,
+.section-guarantee .overlay-circle,
+.section-guarantee .overlay-horizontal {
+    display: none !important;
+}
+
+.guarantee-grid {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 4rem;
+    align-items: center;
+    padding-left: 10rem;
+}
+
+.youtube-embed-wrapper {
+    position: relative;
+    padding-bottom: 56.25%;
+    /* 16:9 Aspect Ratio */
+    height: 0;
+    overflow: hidden;
+    border-radius: 4px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.youtube-embed-wrapper:hover {
+    transform: scale(1.02);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.youtube-embed-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.guarantee-heading {
+    font-size: 3rem;
+    line-height: 1.1;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(90deg, #1E468C, #AA87FA);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.guarantee-subtext {
+    font-size: 1.125rem;
+    line-height: 1.5;
+    color: black;
+    /* Changed from #ccc to black per user request */
+    margin-bottom: 2rem;
+    max-width: 90%;
+}
+
+
+
+@media screen and (max-width: 991px) {
+    .guarantee-grid {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+        padding-left: 0;
+    }
+
+    .guarantee-heading {
+        font-size: 2.5rem;
+    }
+}
+
+@media screen and (max-width: 479px) {
+    .guarantee-heading {
+        font-size: 2rem;
+    }
+
+    .guarantee-grid {
+        gap: 2rem;
+    }
+}
+
+
+.section-testimonials .padding-section-large {
+    padding-top: 8rem !important;
+}
+
+@media screen and (max-width: 991px) {
+    .section-testimonials .padding-section-large {
+        padding-top: 4rem !important;
+    }
+}
+
+/* Force left alignment and match properties of portfolio section */
