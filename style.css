@@ -103,7 +103,8 @@ input[type="file"]:focus-visible {
 
 /* Prevent all click and hover interaction with an element */
 .pointer-events-off {
-    pointer-events: auto; cursor: pointer;
+    pointer-events: auto;
+    cursor: pointer;
 }
 
 /* Enables all click and hover interaction with an element */
@@ -810,7 +811,8 @@ select {
     transition: all 0.3s ease;
     opacity: 0.9;
     z-index: 10;
-    pointer-events: auto; cursor: pointer;
+    pointer-events: auto;
+    cursor: pointer;
     /* Let clicks pass through to the card/video wrapper */
 }
 
@@ -1006,7 +1008,8 @@ select {
     transition: all 0.3s ease;
     opacity: 0.9;
     z-index: 10;
-    pointer-events: auto; cursor: pointer;
+    pointer-events: auto;
+    cursor: pointer;
     /* Let clicks pass through to the card/video wrapper */
 }
 
@@ -1156,5 +1159,95 @@ select {
 /* Force left alignment and match properties of portfolio section */
 
 /* Playing state: Hide button unless hovering */
-.story-card.is-playing .play-button-small { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
-.story-card.is-playing:hover .play-button-small { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+.story-card.is-playing .play-button-small {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.9);
+}
+
+.story-card.is-playing:hover .play-button-small {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* Prevent phone number wrapping in header button */
+.main-button.is-header .btn-text {
+    white-space: nowrap !important;
+    width: auto !important;
+    max-width: none !important;
+    display: inline-block !important;
+}
+
+/* Override button dot color */
+.button-dot {
+    background-color: white !important;
+}
+
+/* robust button dot styling */
+.button-dot {
+    width: 6px !important;
+    height: 6px !important;
+    background-color: white !important;
+    border-radius: 50% !important;
+    display: block !important;
+    opacity: 1 !important;
+}
+
+.button-dot {
+    width: 6px !important;
+    height: 6px !important;
+    background-color: white !important;
+    border-radius: 50% !important;
+    display: block !important;
+    opacity: 1 !important;
+}
+
+/* Hide mobile burger menu */
+@media screen and (max-width: 991px) {
+    .navbar-menu-burger {
+        display: none !important;
+    }
+}
+
+/* Remove animation from contact button */
+/* Remove animation from contact button in navbar only */
+.navbar-btn-wrapp .main-button.is-header,
+.navbar-btn-wrapp .main-button.is-header * {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+}
+
+.navbar-btn-wrapp .main-button.is-header .button-dot-wrap {
+    display: none !important;
+}
+
+/* Mobile Navbar: Show Phone Button Right Aligned */
+@media screen and (max-width: 991px) {
+    .navbar-links-wrapper {
+        display: flex !important;
+        margin-left: auto !important;
+    }
+
+    .navigation-link {
+        display: none !important;
+    }
+
+    .navbar-btn-wrapp {
+        display: flex !important;
+    }
+}
+
+/* Reset wrapping for generic buttons */
+.main-button.is-header .btn-text {
+    white-space: normal !important;
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+/* Enforce no-wrap for navbar button only */
+.navbar-btn-wrapp .main-button.is-header .btn-text {
+    white-space: nowrap !important;
+    width: auto !important;
+    max-width: none !important;
+    display: inline-block !important;
+}
