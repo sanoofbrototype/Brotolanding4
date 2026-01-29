@@ -324,7 +324,14 @@ document.addEventListener("DOMContentLoaded", () => {
                             playBtn.style.display = 'flex';
                             playBtn.innerHTML = '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>';
                         }
-                        container.dataset.isPlaying = "false";
+
+                        // Fix for Race Condition: Only reset isPlaying if NO other video is playing in this container
+                        const allVideos = container.querySelectorAll('.story-thumb-video');
+                        const isAnyPlaying = Array.from(allVideos).some(v => !v.paused && !v.ended && v.readyState > 2);
+
+                        if (!isAnyPlaying) {
+                            container.dataset.isPlaying = "false";
+                        }
                         card.classList.remove('is-playing');
                     }
                 };

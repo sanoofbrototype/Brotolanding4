@@ -402,7 +402,7 @@ select {
         padding-top: 100px !important;
     }
 
-    .portfolio-heading-wrap {
+    .section-portfolio .portfolio-heading-wrap {
         padding-bottom: 0.5rem !important;
         /* Reduce gap */
     }
@@ -614,92 +614,15 @@ select {
 }
 
 /* Reduce gap between portfolio heading and graphic */
-.portfolio-heading-wrap {
+.section-portfolio .portfolio-heading-wrap {
     padding-bottom: 0 !important;
     margin-bottom: 0 !important;
 }
 
-.graphic-wrapper {
+.section-portfolio .graphic-wrapper {
     margin-top: -2rem !important;
 }
 
-/* Footer Color Change - Restoring Original Gradient & Structure Override */
-.footer {
-    background-color: transparent !important;
-    position: relative;
-    z-index: 5;
-    padding-bottom: 3rem !important;
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
-    /* Separator line */
-    padding-top: 0.5rem !important;
-    /* Add some spacing */
-}
-
-.footer-color {
-    background-color: white !important;
-    background-image: none !important;
-    position: absolute;
-    z-index: -1;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    height: 100%;
-}
-
-.padding-global,
-.footer-wrapper,
-.footer-content-wrap {
-    background-color: transparent !important;
-}
-
-.footer-text,
-.navigation-link,
-.footer-signature-wrap div {
-    color: black !important;
-    position: relative;
-    z-index: 10;
-}
-
-/* Ensure bottom footer links are black for contrast against white background */
-.footer-links.is-tablet.smal-gap .footer-text,
-.footer-links.is-tablet.smal-gap .navigation-link,
-.footer-links.is-tablet.smal-gap svg {
-    color: black !important;
-    fill: black !important;
-}
-
-/* Social Icon Hover Effects */
-.social-icon-link {
-    transition: transform 0.3s ease, opacity 0.3s ease;
-    display: inline-block;
-    /* Ensure transform works */
-}
-
-.social-icon-link:hover {
-    transform: translateY(-5px);
-    opacity: 0.7;
-}
-
-.social-icon-link:hover svg {
-    /* Using a purple accent color matching the site theme */
-    fill: #AA87FA !important;
-    color: #AA87FA !important;
-}
-
-/* Footer Text Hover Effects */
-.footer-hover-link {
-    cursor: pointer;
-}
-
-.footer-hover-link .footer-text {
-    transition: color 0.3s ease;
-}
-
-.footer-hover-link:hover .footer-text {
-    color: #AA87FA !important;
-}
 
 /* Testimonials Section */
 .section-testimonials {
@@ -1055,13 +978,6 @@ select {
     }
 }
 
-/* Guarantee Section Styles */
-.section-guarantee {
-    background-color: #ffffff;
-    /* Clean white background to make text readable */
-    color: black;
-}
-
 .section-guarantee .overlay-vertical,
 .section-guarantee .overlay-circle,
 .section-guarantee .overlay-horizontal {
@@ -1250,4 +1166,38 @@ select {
     width: auto !important;
     max-width: none !important;
     display: inline-block !important;
+}
+
+/* --- Mobile Navbar Fixes (Scoped) --- */
+@media screen and (max-width: 991px) {
+
+    /* Navbar Specific Visibility Fixes */
+    .navbar .navigation-link {
+        display: none !important;
+    }
+
+    /* Logo Visibility - Specific to Navbar */
+    .navbar .navbar-logo,
+    .navbar .brand-text {
+        display: flex !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+
+    .navbar .logo-mark {
+        display: block !important;
+    }
+
+    .navbar .navbar-wrapper {
+        justify-content: space-between !important;
+    }
+}
+
+/* Fix Mobile Arrow Lottie Visibility */
+@media screen and (max-width: 991px) {
+    .arrow-lottie-wrap {
+        display: block !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
 }
