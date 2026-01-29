@@ -172,10 +172,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // State for Drag/Swipe
         let isDown = false;
-        let startX;
-        let scrollLeft;
+        let startX, scrollLeft;
         let isDragging = false;
         let touchStartX = 0;
+        let dragStartX, dragStartY, dragStartTime;
 
         // Desktop: Continuous Marquee
         if (window.innerWidth > 768) {
@@ -278,13 +278,18 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
 
+
         // --- Drag/Manual Scroll Implementation (Mouse) ---
         container.addEventListener('mousedown', (e) => {
             isDown = true;
             container.classList.add('active');
             startX = e.pageX - container.offsetLeft;
             scrollLeft = container.scrollLeft;
-            isDragging = false;
+
+            // Record start for click-vs-drag detection
+            dragStartX = e.pageX;
+            dragStartY = e.pageY;
+            dragStartTime = Date.now();
         });
 
         container.addEventListener('mouseleave', () => {
@@ -295,10 +300,6 @@ document.addEventListener("DOMContentLoaded", () => {
         container.addEventListener('mouseup', () => {
             isDown = false;
             container.classList.remove('active');
-            setTimeout(() => {
-                // container.dataset.wasDragging = "false"; // Legacy check
-                isDragging = false;
-            }, 50);
         });
 
         container.addEventListener('mousemove', (e) => {
@@ -306,99 +307,134 @@ document.addEventListener("DOMContentLoaded", () => {
             e.preventDefault();
             const x = e.pageX - container.offsetLeft;
             const walk = (x - startX) * 2;
-
-            if (Math.abs(x - startX) > 5) {
-                // container.dataset.wasDragging = "true"; // Legacy check
-                isDragging = true;
-            }
             container.scrollLeft = scrollLeft - walk;
         });
 
-        // Click Interception (Capture Phase)
-        container.addEventListener('click', (e) => {
-            // If we determined it was a drag (via mouse or touch), stop the click
-            if (isDragging) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
-        }, true);
-    });
-
-    // Video Cards Click Logic
-    const videoCards = document.querySelectorAll('.video-facade-card');
-    videoCards.forEach(card => {
-        const video = card.querySelector('.story-thumb-video');
-        const playBtn = card.querySelector('.play-button-small');
-        const container = card.closest('.carousel-track-container');
-
-        if (video) {
-            const resetState = () => {
-                // When paused or ended, show default state
-                if (video.paused || video.ended) {
-                    video.controls = false;
-                    if (playBtn) playBtn.style.display = 'flex'; // Ensure flex
-                    if (container) container.dataset.isPlaying = "false";
-                }
-            };
-
-            video.addEventListener('pause', resetState);
-            video.addEventListener('ended', resetState);
-        }
-
-        card.addEventListener('click', function (e) {
-            // The container capture listener above handles drag prevention.
-            // If we are here, it's a valid click.
-
-            const video = this.querySelector('.story-thumb-video');
-            const playBtn = this.querySelector('.play-button-small');
+        // Testimonial Card Interaction (within this container)
+        const videoCards = container.querySelectorAll('.video-facade-card');
+        videoCards.forEach(card => {
+            const video = card.querySelector('.story-thumb-video');
+            const playBtn = card.querySelector('.play-button-small');
 
             if (video) {
-                // Pause all other videos
-                document.querySelectorAll('.story-thumb-video').forEach(v => {
-                    if (v !== video && !v.paused) {
-                        v.pause();
-                        // Reset UI for others immediately
-                        v.controls = false;
-                        const otherCard = v.closest('.story-card');
-                        const otherBtn = otherCard.querySelector('.play-button-small');
-                        if (otherBtn) otherBtn.style.display = 'flex';
+                const resetState = () => {
+                    if (video.paused || video.ended) {
+                        video.controls = false;
+                        if (playBtn) {
+                            playBtn.style.display = 'flex';
+                            playBtn.innerHTML = '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>';
+                        }
+                        container.dataset.isPlaying = "false";
+                        card.classList.remove('is-playing');
+                    }
+                };
+                video.addEventListener('pause', resetState);
+                video.addEventListener('ended', resetState);
+            }
+
+            // 1. Direct "Play Button" Click (Bypasses drag checks for instant feedback)
+            if (playBtn) {
+                playBtn.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent bubbling to card
+                    if (video) {
+                        if (video.paused) {
+                            // Play Logic
+                            document.querySelectorAll('.story-thumb-video').forEach(v => {
+                                if (v !== video && !v.paused) {
+                                    v.pause();
+                                    v.controls = false;
+                                    const otherCard = v.closest('.story-card');
+                                    const otherBtn = otherCard.querySelector('.play-button-small');
+                                    if (otherBtn) {
+                                        otherBtn.style.display = 'flex';
+                                        otherBtn.innerHTML = '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>';
+                                    }
+                                }
+                            });
+                            video.muted = false;
+                            video.controls = false; // Disable native controls to force custom UI
+                            video.play().catch(err => console.log("Play error:", err));
+
+                            // Change to Pause Icon and Keep Visible
+                            playBtn.style.display = 'flex';
+                            playBtn.innerHTML = '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
+
+                            video.style.opacity = '1';
+                            container.dataset.isPlaying = "true";
+                            card.classList.add('is-playing');
+
+                            // Center the Card
+                            const containerRect = container.getBoundingClientRect();
+                            const cardRect = card.getBoundingClientRect();
+                            const targetScroll = container.scrollLeft + (cardRect.left - containerRect.left) - (containerRect.width / 2) + (cardRect.width / 2);
+
+                            container.scrollTo({
+                                left: targetScroll,
+                                behavior: 'smooth'
+                            });
+                        } else {
+                            // Pause Logic
+                            video.pause();
+                            // resetState (via 'pause' event) will handle icon reset
+                        }
                     }
                 });
-
-                video.muted = false;
-                video.controls = true;
-
-                // Robust Play
-                const playPromise = video.play();
-                if (playPromise !== undefined) {
-                    playPromise.catch(error => {
-                        console.log("Auto-play prevented:", error);
-                    });
-                }
-
-                if (playBtn) playBtn.style.display = 'none';
-                video.style.opacity = '1';
-
-                if (container) {
-                    container.dataset.isPlaying = "true"; // Stop auto-scroll
-
-                    // Center the card Logic (Robust)
-                    const containerRect = container.getBoundingClientRect();
-                    const cardRect = this.getBoundingClientRect();
-                    const currentScroll = container.scrollLeft;
-
-                    const relativeCardLeft = cardRect.left - containerRect.left;
-
-                    // Center generic calculation
-                    // Target = CurrentScroll + (CardRelativeLeft) - (HalfContainer) + (HalfCard)
-                    const targetScroll = currentScroll + relativeCardLeft - (containerRect.width / 2) + (cardRect.width / 2);
-
-                    container.scrollTo({
-                        left: targetScroll,
-                        behavior: 'smooth'
-                    });
-                }
             }
+
+            // 2. Card Interaction (MouseUp for robust drag-vs-click detection on the video area)
+            card.addEventListener('mouseup', function (e) {
+                // Determine source: If it was the play button, ignore (handled above)
+                if (e.target.closest('.play-button-small')) return;
+
+                // Robust Click-vs-Drag Check using variables captured in mousedown
+                const moveX = Math.abs(e.pageX - dragStartX);
+                const moveY = Math.abs(e.pageY - dragStartY);
+                const timeDiff = Date.now() - dragStartTime;
+
+                // Threshold: 30px movement OR > 600ms duration
+                if (moveX > 30 || moveY > 30 || timeDiff > 600) return;
+
+                if (video) {
+                    if (video.paused) {
+                        // Pause all other videos
+                        document.querySelectorAll('.story-thumb-video').forEach(v => {
+                            if (v !== video && !v.paused) {
+                                v.pause();
+                                v.controls = false;
+                                const otherCard = v.closest('.story-card');
+                                const otherBtn = otherCard.querySelector('.play-button-small');
+                                if (otherBtn) otherBtn.style.display = 'flex';
+                            }
+                        });
+
+                        video.muted = false;
+                        video.controls = false; // Disable native controls
+                        video.play().catch(err => console.log("Play error:", err));
+
+                        // Sync UI with Button Logic (Pause Icon)
+                        if (playBtn) {
+                            playBtn.style.display = 'flex';
+                            playBtn.innerHTML = '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
+                        }
+
+                        video.style.opacity = '1';
+                        container.dataset.isPlaying = "true";
+                        card.classList.add('is-playing');
+
+                        // Center the Card
+                        const containerRect = container.getBoundingClientRect();
+                        const cardRect = card.getBoundingClientRect();
+                        const targetScroll = container.scrollLeft + (cardRect.left - containerRect.left) - (containerRect.width / 2) + (cardRect.width / 2);
+
+                        container.scrollTo({
+                            left: targetScroll,
+                            behavior: 'smooth'
+                        });
+                    } else {
+                        video.pause();
+                    }
+                }
+            });
         });
     });
 });

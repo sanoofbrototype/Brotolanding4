@@ -103,7 +103,7 @@ input[type="file"]:focus-visible {
 
 /* Prevent all click and hover interaction with an element */
 .pointer-events-off {
-    pointer-events: none;
+    pointer-events: auto; cursor: pointer;
 }
 
 /* Enables all click and hover interaction with an element */
@@ -810,7 +810,7 @@ select {
     transition: all 0.3s ease;
     opacity: 0.9;
     z-index: 10;
-    pointer-events: none;
+    pointer-events: auto; cursor: pointer;
     /* Let clicks pass through to the card/video wrapper */
 }
 
@@ -1006,7 +1006,7 @@ select {
     transition: all 0.3s ease;
     opacity: 0.9;
     z-index: 10;
-    pointer-events: none;
+    pointer-events: auto; cursor: pointer;
     /* Let clicks pass through to the card/video wrapper */
 }
 
@@ -1154,3 +1154,7 @@ select {
 }
 
 /* Force left alignment and match properties of portfolio section */
+
+/* Playing state: Hide button unless hovering */
+.story-card.is-playing .play-button-small { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+.story-card.is-playing:hover .play-button-small { opacity: 1; transform: translate(-50%, -50%) scale(1); }
