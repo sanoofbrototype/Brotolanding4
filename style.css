@@ -621,11 +621,16 @@ select {
 
 /* Add gap between clients and portfolio */
 .section-portfolio {
-    margin-top: 5rem;
+    margin-top: 0rem;
 }
 
 .padding-section-medium.is-portfolio {
     padding-bottom: 0.5rem;
+}
+
+/* Reduce bottom padding for clients section to minimize gap */
+.section-clients .padding-section-large {
+    padding-bottom: 2rem !important;
 }
 
 /* Reduce gap between portfolio heading and graphic */
