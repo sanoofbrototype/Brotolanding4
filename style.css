@@ -495,6 +495,21 @@ select {
     color: #000;
 }
 
+/* Robust Gradient Text Class for Animation */
+.cta-gradient-text {
+    background: linear-gradient(90deg, #1E468C, #AA87FA) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    color: transparent !important;
+    display: inline-block !important;
+    /* Required for transform */
+    background-size: 200% auto !important;
+    /* Ensure gradient covers animation */
+}
+
+
+
 .modal-heading {
     text-align: center;
     margin-bottom: 2rem;
@@ -1193,11 +1208,140 @@ select {
     }
 }
 
+/* Fix Hero Button Dot Visibility (Move initial position right) */
+.hero-button-wrap .button-dot-wrap {
+    transform: translate3d(1.2rem, 0, 0);
+}
+
+.hero-button-wrap .main-button {
+    overflow: hidden;
+    gap: 0.5rem !important;
+    /* Reduce gap between text and dot */
+}
+
+/* Fix Hero Button Text on Mobile - specific ID override */
+/* Fix Hero Button Text on Mobile - specific ID override */
+@media screen and (max-width: 479px) {
+    #trigger-cta-modal .btn-text {
+        white-space: normal !important;
+        font-size: 0.85rem !important;
+        /* Slightly smaller to fit */
+        line-height: 1.1 !important;
+        text-align: center;
+        padding: 0 !important;
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        color: white !important;
+    }
+
+    #trigger-cta-modal {
+        height: auto !important;
+        padding: 0.6rem 1rem !important;
+        min-height: 3rem;
+        display: flex !important;
+        align-items: center;
+    }
+}
+
 /* Fix Mobile Arrow Lottie Visibility */
 @media screen and (max-width: 991px) {
     .arrow-lottie-wrap {
         display: block !important;
         opacity: 1 !important;
         visibility: visible !important;
+    }
+}
+
+/* Roadmap Section Styling */
+.section-roadmap {
+    background-color: white;
+    color: black;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Robust Gradient Text Class for Animation */
+.cta-gradient-text {
+    background: linear-gradient(90deg, #1E468C, #AA87FA) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    color: transparent !important;
+    display: inline-block !important;
+    /* Required for transform */
+    background-size: 200% auto !important;
+    /* Ensure gradient covers animation */
+}
+
+/* Hero Text Animation Classes */
+.hero-gradient-text {
+    background: linear-gradient(90deg, #1E468C, #AA87FA) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    color: transparent !important;
+    display: inline-block !important;
+    /* Required for transform */
+    background-size: 200% auto !important;
+    /* Ensure gradient covers animation */
+}
+
+.hero-white-text {
+    color: black !important;
+    /* Updated from white */
+    display: inline-block !important;
+    opacity: 1 !important;
+    /* Let animate.css handle opacity fade */
+}
+
+/* Ensure Hero Paragraph Block Structure */
+.hero-line-block {
+    display: block !important;
+    margin-bottom: 0.5rem;
+    text-align: center !important;
+    /* Force center alignment */
+    white-space: nowrap !important;
+    /* Prevent single letter drop */
+}
+
+#hero-paragraph-anim,
+#hero-heading-anim {
+    text-align: center !important;
+    max-width: 900px !important;
+    /* Ensure container is wide enough */
+    width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+/* On mobile (< 768px), display as inline paragraph for better flow */
+@media screen and (max-width: 767px) {
+    .hero-line-block {
+        display: inline !important;
+        white-space: normal !important;
+    }
+
+    /* Add spacing between the inline blocks so words don't merge */
+    .hero-line-block::after {
+        content: " ";
+        white-space: normal !important;
+    }
+
+    #hero-heading-anim {
+        font-size: 2.2rem !important;
+        /* Scaled down for mobile */
+        line-height: 1.2 !important;
+        white-space: normal !important;
+    }
+
+    #hero-heading-anim br {
+        display: block !important;
+        content: "" !important;
+        margin-top: 0 !important;
     }
 }

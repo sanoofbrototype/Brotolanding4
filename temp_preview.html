@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<!-- This site was created in Webflow. https://www.webflow.com --><!-- Last Published: Sun Feb 26 2023 13:22:55 GMT+0000 (Coordinated Universal Time) -->
+<html data-wf-domain="scroll-type.webflow.io" data-wf-page="63f8aaf61221d04696b1cedf"
+    data-wf-site="63f8aaf61221d07c92b1cede">
+
+<head>
+    <meta charset="utf-8" />
+    <title>10 On-scroll Typography Effects - Dhruv Sachdev</title>
+    <meta
+        content="This gives users 10 on-scroll typography effects that they can use to improve their website&#x27;s visual interest."
+        name="description" />
+    <meta content="10 On-scroll Typography Effects - Dhruv Sachdev" property="og:title" />
+    <meta
+        content="This gives users 10 on-scroll typography effects that they can use to improve their website&#x27;s visual interest."
+        property="og:description" />
+    <meta content="10 On-scroll Typography Effects - Dhruv Sachdev" property="twitter:title" />
+    <meta
+        content="This gives users 10 on-scroll typography effects that they can use to improve their website&#x27;s visual interest."
+        property="twitter:description" />
+    <meta property="og:type" content="website" />
+    <meta content="summary_large_image" name="twitter:card" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta content="Webflow" name="generator" />
+    <link href="https://assets.website-files.com/63f8aaf61221d07c92b1cede/css/scroll-type.webflow.a3a6fa5b3.min.css"
+        rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous" />
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
+    <script type="text/javascript">WebFont.load({ google: { families: ["Inter:regular,500,700"] } });</script>
+    <!--[if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js" type="text/javascript"></script><![endif]-->
+    <script
+        type="text/javascript">!function (o, c) { var n = c.documentElement, t = " w-mod-"; n.className += t + "js", ("ontouchstart" in o || o.DocumentTouch && c instanceof DocumentTouch) && (n.className += t + "touch") }(window, document);</script>
+    <link href="https://assets.website-files.com/63f8aaf61221d07c92b1cede/63f8d3941e35ed0dd7145321_favicon-32x32.png"
+        rel="shortcut icon" type="image/x-icon" />
+    <link href="https://assets.website-files.com/63f8aaf61221d07c92b1cede/63f8d396ab0da6d80299db5d_favicon-256x256.png"
+        rel="apple-touch-icon" />
+    <link href="
+https://cdn.jsdelivr.net/npm/splitting@1.0.6/dist/splitting.min.css
+" rel="stylesheet">
+
+    <link href="
+https://cdn.jsdelivr.net/npm/splitting@1.0.6/dist/splitting-cells.css
+" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Navbar Removed -->
+    <div class="page-styles w-embed">
+        <style>
+            * {
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+                font-smoothing: antialiased;
+                text-rendering: optimizeLegibility;
+            }
+        </style>
+    </div>
+    <div class="styles---glowing-button w-embed">
+        <style>
+            * {
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+                font-smoothing: antialiased;
+                text-rendering: optimizeLegibility;
+            }
+
+            html {
+                font-size: calc(0.625rem + 0.41666666666666663vw);
+            }
+
+            @media screen and (max-width:1920px) {
+                html {
+                    font-size: calc(0.625rem + 0.41666666666666674vw);
+                }
+            }
+
+            @media screen and (max-width:1440px) {
+                html {
+                    font-size: calc(0.8126951092611863rem + 0.20811654526534862vw);
+                }
+            }
+
+            @media screen and (max-width:479px) {
+                html {
+                    font-size: calc(0.7494769874476988rem + 0.8368200836820083vw);
+                }
+            }
+
+            /* ORIGINAL GLOWS RESTORED */
+            .glowing-wrapper-button:after {
+                background: radial-gradient(85% 120% at 50% 120%, rgba(255, 255, 255, .24) 0%, rgba(255, 255, 255, 0) 100%);
+                border-radius: 999px;
+                content: "";
+                height: calc(100% + 4px);
+                left: -2px;
+                opacity: 0;
+                position: absolute;
+                top: -2px;
+                transition: 1s all;
+                width: calc(100% + 4px)
+            }
+
+            .glowing-wrapper-button:hover:after {
+                opacity: .7
+            }
+
+
+            .glowing-wrapper-active .glowing-wrapper-animations,
+            .glowing-wrapper-active .glowing-wrapper-borders-masker {
+                opacity: 1
+            }
+
+            .glowing-wrapper-animations:before,
+            .glowing-wrapper-borders:before {
+                content: "";
+                float: left;
+                padding-top: 100%
+            }
+
+            .glowing-wrapper-animations:after,
+            .glowing-wrapper-borders:after {
+                clear: both;
+                content: "";
+                display: block
+            }
+
+            .glowing-wrapper-animations {
+                pointer-events: none;
+            }
+
+            .glowing-wrapper-animations * {
+                height: 100%;
+                left: 0;
+                position: absolute;
+                top: 0;
+                width: 100%
+            }
+
+            .glowing-wrapper-borders,
+            .glowing-wrapper-glow,
+            .glowing-wrapper-mask {
+                animation: borderTurn 2.5s infinite linear;
+                /* Original Conic Gradient: White stops */
+                background-image: conic-gradient(from 0 at 50% 50%, rgba(255, 255, 255, .5) 0deg, rgba(255, 255, 255, 0) 60deg, rgba(255, 255, 255, 0) 310deg, rgba(255, 255, 255, .5) 360deg);
+                background-position: center center;
+                background-repeat: no-repeat;
+                background-size: cover
+            }
+
+            .glowing-wrapper-mask-wrapper {
+                -webkit-mask: url("data:image/svg+xml,url('data:image/svg+xml,%253Csvg width='28' height='24' viewBox='0 0 28 24' fill='none' xmlns='http://www.w3.org/2000/svg'%253E%253Crect width='28' height='24' fill='black'/%253E%253C/svg%253E%250A');");
+                mask: url("data:image/svg+xml,url('data:image/svg+xml,%253Csvg width='28' height='24' viewBox='0 0 28 24' fill='none' xmlns='http://www.w3.org/2000/svg'%253E%253Crect width='28' height='24' fill='black'/%253E%253C/svg%253E%250A');");
+                mask-repeat: repeat;
+                -webkit-mask-size: auto;
+                mask-size: auto
+            }
+
+            .glowing-wrapper-borders {
+                animation-name: borderTurnWithTranslate
+            }
+
+            .glowing-wrapper-borders-masker {
+                content: "";
+                inset: 0;
+                -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+                mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+                mask-composite: xor;
+                -webkit-mask-composite: xor;
+                mask-composite: exclude;
+                pointer-events: none;
+            }
+
+            @keyframes borderTurn {
+                0% {
+                    transform: rotate(0)
+                }
+
+                to {
+                    transform: rotate(360deg)
+                }
+            }
+
+            @keyframes borderTurnWithTranslate {
+                0% {
+                    transform: translate(-50%, -50%) rotate(0)
+                }
+
+                to {
+                    transform: translate(-50%, -50%) rotate(360deg)
+                }
+            }
+        </style>
+    </div>
+    <div class="cursor-wrapper">
+        <div data-w-id="00bafe71-5275-9c7d-7117-2bb42a4b606c" style="width:1rem;height:1rem" class="cursor"></div>
+        <div class="w-embed">
+            <style>
+                .cursor-wrapper {
+                    pointer-events: none;
+                    mix-blend-mode: difference;
+                }
+            </style>
+        </div>
+    </div>
+    <div class="main-wrapper">
+        <header class="hero">
+            <div class="page-padding">
+                <div class="container">
+                    <div class="hero-header">
+                        <h1 class="hero-heading">10 Scrolling<br />Typography Effects</h1>
+                        <h2 class="subheading subheading--hero">Bring your design to life with typographic
+                            movement.<br />Clone to use in your project today!</h2>
+                        <div class="glowing-wrapper glowing-wrapper-active">
+                            <div class="glowing-wrapper-animations">
+                                <div class="glowing-wrapper-glow"></div>
+                                <div class="glowing-wrapper-mask-wrapper">
+                                    <div class="glowing-wrapper-mask"></div>
+                                </div>
+                            </div>
+                            <div class="glowing-wrapper-borders-masker">
+                                <div class="glowing-wrapper-borders"></div>
+                            </div><a data-w-id="fc6a3393-1275-8c55-73f9-4d44bc7c26a3"
+                                href="https://webflow.grsm.io/type" target="_blank"
+                                class="glowing-wrapper-button w-inline-block">
+                                <div class="button-text">Clone Now →</div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div class="section first wf-section">
+            <div class="container">
+                <div class="content">
+                    <h2 class="number">1</h2>
+                    <div class="vertical-divider"></div>
+                    <h2 data-effect1="" data-splitting=""><span class="text-size-small">The night was a symphony of
+                            sights and scents. The whispering breeze played its tune, accompanied by the gentle patter
+                            of silken rain. The starry sky was a masterpiece, a canvas of twinkling lights. The sun set,
+                            casting its final rays, painting the sky with brilliant hues. The majesty of nature was a
+                            reminder of the beauty that surrounds us, a serene symphony that sings to the soul.</span>
+                    </h2>
+                </div>
+            </div>
+        </div>
+        <div class="section wf-section">
+            <div class="container">
+                <div class="content">
+                    <h2 class="number">2</h2>
+                    <div class="vertical-divider"></div>
+                    <h2 data-effect2="" data-splitting="" class="heading-scroll center _2"><span
+                            class="text-span-8">Flowing</span> thoughts</h2>
+                </div>
+            </div>
+        </div>
+        <div class="section wf-section">
+            <div class="container">
+                <div class="content">
+                    <h2 class="number">3</h2>
+                    <div class="vertical-divider"></div>
+                    <h2 data-effect3="" data-splitting="" class="heading-scroll center _3">Words that<br /><span
+                            class="text-span-7">Move</span></h2>
+                </div>
+            </div>
+        </div>
+        <div class="section wf-section">
+            <div class="container">
+                <div class="content">
+                    <h2 class="number">4</h2>
+                    <div class="vertical-divider"></div>
+                    <h2 data-effect4="" data-splitting="" class="heading-scroll center _4">Creating the<br /><span
+                            class="text-span-3">Unexpected</span></h2>
+                </div>
+            </div>
+        </div>
+        <div class="section wf-section">
+            <div class="container">
+                <div class="content">
+                    <h2 class="number">5</h2>
+                    <div class="vertical-divider"></div>
+                    <h2 data-effect5="" data-splitting="" class="heading-scroll center _5">LUCID<br /><span
+                            class="text-span">DREAMING</span></h2>
+                </div>
+            </div>
+        </div>
+        <div class="section wf-section">
+            <div class="container">
+                <div class="content">
+                    <h2 class="number">6</h2>
+                    <div class="vertical-divider"></div>
+                    <h2 data-effect6="" data-splitting="" class="heading-scroll center _6"><span
+                            class="text-span-2">Emerging</span> PERSPECTIVES</h2>
+                </div>
+            </div>
+        </div>
+        <div class="section wf-section">
+            <div class="container">
+                <div class="content">
+                    <h2 class="number">7</h2>
+                    <div class="vertical-divider"></div>
+                    <h2 data-effect7="" data-splitting="" class="heading-scroll center _7">Rolling hills</h2>
+                </div>
+            </div>
+        </div>
+        <div class="section extra-margin wf-section">
+            <div class="container">
+                <div class="content">
+                    <h2 class="number">8</h2>
+                    <div class="vertical-divider"></div>
+                    <h2 data-effect8="" data-splitting="" class="heading-scroll longer"><span class="text-span-6">And
+                            blood-black nothingness began to spin. A system of cells interlinked, within cells
+                            interlinked, within cells interlinked within one stem. And dreadfully distinct against the
+                            dark,</span> a tall white fountain played.</h2>
+                </div>
+            </div>
+        </div>
+        <div class="section wf-section">
+            <div class="container">
+                <div class="content">
+                    <h2 class="number">9</h2>
+                    <div class="vertical-divider"></div>
+                    <h2 data-effect9="" data-splitting="" class="heading-scroll center _9">appear</h2>
+                </div>
+            </div>
+        </div>
+        <div class="section last wf-section">
+            <div class="container">
+                <div class="content">
+                    <h2 class="number">10</h2>
+                    <div class="vertical-divider"></div>
+                    <h2 data-effect10="" data-splitting="" class="heading-scroll longer center _10">We are the music
+                        makers, and we are the dreamers of dreams. We are the ones who paint the colors of the wind, and
+                        dance in the fields of the stars. We are the ones who shape the world with our imagination, and
+                        make the impossible possible. And when we are gone, our dreams will live on, a legacy of the
+                        magic we brought into this world.</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=63f8aaf61221d07c92b1cede"
+        type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+        crossorigin="anonymous"></script>
+    <script src="https://assets.website-files.com/63f8aaf61221d07c92b1cede/js/webflow.24e49aea6.js"
+        type="text/javascript"></script>
+    <!--[if lte IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif]-->
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@0.2.28/bundled/lenis.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"
+        integrity="sha512-f8mwTB+Bs8a5c46DEm7HQLcJuHMBaH/UFlcgyetMqqkvTcYg4g5VXsYR71b3qC82lZytjNYvBj2pf0VekA9/FQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"
+        integrity="sha512-A64Nik4Ql7/W/PJk2RNOmVyC/Chobn5TY08CiKEX50Sdw+33WTOpPJ/63bfWPl0hxiRv1trPs5prKO8CpA7VNQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/splitting@1.0.6/dist/splitting.min.js"></script>
+    <script src="https://wl6nqr.csb.app/scrollType.js"></script>
+</body>
+
+</html>

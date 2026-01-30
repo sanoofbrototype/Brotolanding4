@@ -1,0 +1,142 @@
+/* =========================================
+   Roadmap Section Styles 
+   (Scoped to #roadmap-content to avoid conflicts)
+   ========================================= */
+
+#roadmap-content {
+    /* Ensure light theme */
+    background-color: #ffffff;
+    color: #000000;
+    font-family: 'Inter', sans-serif;
+    /* Reset text align */
+    text-align: left;
+}
+
+#roadmap-content * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+/* Typography Overrides */
+#roadmap-content h1,
+#roadmap-content h2,
+#roadmap-content p,
+#roadmap-content span {
+    color: #000000 !important;
+}
+
+/* 
+   Roadmap Hero 
+   (Renamed from .hero to .roadmap-hero to avoid conflict) 
+*/
+.roadmap-hero {
+    /* Add hero styles if any specific layout needed */
+    padding: 100px 0 50px 0;
+    position: relative;
+    z-index: 2;
+}
+
+.roadmap-hero .hero-header {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.roadmap-hero .hero-heading {
+    font-size: 5rem;
+    line-height: 1.1;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(90deg, #1E468C, #AA87FA);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+    /* Required for background-clip usually */
+}
+
+.roadmap-hero .subheading {
+    font-size: 1.5rem;
+    line-height: 1.6;
+    opacity: 0.8;
+    margin-bottom: 3rem;
+}
+
+/* 
+   Roadmap Sections 
+   (Generic .section renamed to .roadmap-item-section)
+*/
+.roadmap-item-section {
+    min-height: 80vh;
+    /* Give them space to scroll */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 100px 0;
+    position: relative;
+}
+
+.roadmap-item-section.first {
+    margin-top: 0;
+}
+
+.roadmap-item-section.last {
+    margin-bottom: 100px;
+}
+
+.roadmap-item-section .content {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+}
+
+/* Number Counters */
+#roadmap-content .number {
+    font-size: 10rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 2rem;
+    background: linear-gradient(90deg, #1E468C, #AA87FA);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+}
+
+/* Vertical Divider */
+#roadmap-content .vertical-divider {
+    width: 2px;
+    height: 100px;
+    background: linear-gradient(to bottom, #1E468C, #AA87FA);
+    margin: 0 auto 2rem;
+}
+
+/* Scroll Effect Headings */
+.heading-scroll {
+    font-size: 4rem;
+    line-height: 1.2;
+    font-weight: 700;
+}
+
+.heading-scroll.center {
+    text-align: center;
+}
+
+.heading-scroll.longer {
+    font-size: 3rem;
+}
+
+
+
+/* Splitting Utility Classes (Required for effects) */
+.splitting .word,
+.splitting .char {
+    display: inline-block;
+}
+
+.splitting .char {
+    position: relative;
+}
