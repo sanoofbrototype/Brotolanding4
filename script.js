@@ -23,6 +23,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 7. Initialize Roadmap Animations (Native Merge)
     initRoadmapAnimations();
+
+    // 8. Initialize Testimonial Animations
+    initTestimonialAnimations();
 });
 
 // --- Feature Functions ---
@@ -35,28 +38,13 @@ function initRoadmapAnimations() {
         Splitting();
     }
 
-    const type1 = [...document.querySelectorAll("[data-splitting][data-effect1]")];
+    // Only select effects actually used in HTML
     const type2 = [...document.querySelectorAll("[data-splitting][data-effect2]")];
     const type3 = [...document.querySelectorAll("[data-splitting][data-effect3]")];
     const type4 = [...document.querySelectorAll("[data-splitting][data-effect4]")];
     const type5 = [...document.querySelectorAll("[data-splitting][data-effect5]")];
     const type6 = [...document.querySelectorAll("[data-splitting][data-effect6]")];
     const type7 = [...document.querySelectorAll("[data-splitting][data-effect7]")];
-    const type8 = [...document.querySelectorAll("[data-splitting][data-effect8]")];
-    const type9 = [...document.querySelectorAll("[data-splitting][data-effect9]")];
-    const type10 = [...document.querySelectorAll("[data-splitting][data-effect10]")];
-
-    // Effect 1
-    type1.forEach((title) => {
-        gsap.fromTo(title,
-            { transformOrigin: "0% 50%", rotate: 3 },
-            { ease: "none", rotate: 0, scrollTrigger: { trigger: title, start: "top bottom", end: "center center", scrub: true } }
-        );
-        gsap.fromTo(title.querySelectorAll(".word"),
-            { "will-change": "opacity", opacity: 0.1 },
-            { ease: "none", opacity: 1, stagger: 0.05, scrollTrigger: { trigger: title, start: "top bottom-=10%", end: "center center", scrub: true } }
-        );
-    });
 
     // Effect 2
     type2.forEach((title) => {
@@ -108,28 +96,40 @@ function initRoadmapAnimations() {
         );
     });
 
-    // Effect 7
+    // Effect 7 (Rolling Hills - Elastic Bounce)
     type7.forEach(title => {
         const chars = title.querySelectorAll(".char");
-        gsap.fromTo(chars, { opacity: 0 }, { opacity: 1, stagger: 0.1, scrollTrigger: { trigger: title, start: "top bottom", end: "center center", scrub: true } });
-    });
+        const charsTotal = chars.length;
 
-    // Effect 8
-    type8.forEach(title => {
-        const chars = title.querySelectorAll(".char");
-        gsap.fromTo(chars, { scale: 0 }, { scale: 1, stagger: 0.05, scrollTrigger: { trigger: title, start: "top bottom", end: "center center", scrub: true } });
-    });
-
-    // Effect 9
-    type9.forEach(title => {
-        const chars = title.querySelectorAll(".char");
-        gsap.fromTo(chars, { y: 100, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.03, scrollTrigger: { trigger: title, start: "top bottom", end: "center center", scrub: true } });
-    });
-
-    // Effect 10
-    type10.forEach(title => {
-        const chars = title.querySelectorAll(".char");
-        gsap.fromTo(chars, { filter: "blur(10px)", opacity: 0 }, { filter: "blur(0px)", opacity: 1, stagger: 0.05, scrollTrigger: { trigger: title, start: "top bottom", end: "center center", scrub: true } });
+        gsap.fromTo(
+            chars,
+            {
+                "will-change": "transform",
+                y: (position) => {
+                    const factor =
+                        position < Math.ceil(charsTotal / 2)
+                            ? position
+                            : Math.ceil(charsTotal / 2) -
+                            Math.abs(Math.floor(charsTotal / 2) - position) -
+                            1;
+                    return (charsTotal / 2 - factor + 6) * 130;
+                }
+            },
+            {
+                ease: "elastic.out(.4)",
+                y: 0,
+                stagger: {
+                    amount: 0.1,
+                    from: "center"
+                },
+                scrollTrigger: {
+                    trigger: title,
+                    start: "top bottom",
+                    end: "center center", // Matched roughly to others
+                    scrub: true
+                }
+            }
+        );
     });
 
     // Description Animations (Fade Up)
@@ -146,8 +146,7 @@ function initRoadmapAnimations() {
                     trigger: desc,
                     start: "top bottom-=10%", // Start animating when it enters lower part of screen
                     end: "center center",
-                    toggleActions: "play reverse play reverse", // Play on enter, reverse on leave
-                    // scrub: true // Optional: uncomment if you want it tied to scroll like headings
+                    toggleActions: "play none none reverse", // Play on enter, do nothing on leave, do nothing on enterBack, reverse on leaveBack
                 }
             }
         );
@@ -158,28 +157,29 @@ function initHeroAnimations() {
     const heading = document.getElementById('hero-heading-anim');
     const paragraph = document.getElementById('hero-paragraph-anim');
 
-    // Helper: Wrap letters
-    const wrapLetters = (text, startIndex, className) => {
+    // Helper: Wrap letters with configurable animation timing
+    const wrapLetters = (text, startIndex, className, duration = "0.5s", stagger = 0.03) => {
         return text.split('').map((char, i) => {
             if (char === ' ') return ' '; // Use normal space for natural wrapping
-            return `<span class="${className} animate__animated animate__fadeInLeft" style="animation-duration: 0.5s; animation-delay: ${(startIndex + i) * 0.018}s;">${char}</span>`;
+            return `<span class="${className} animate__animated animate__fadeInLeft" style="animation-duration: ${duration}; animation-delay: ${(startIndex + i) * stagger}s;">${char}</span>`;
         }).join('');
     };
 
-    // Animate Heading
+    // Animate Heading (Slower)
     if (heading) {
         const hText1 = "Become a Software";
         const hText2 = " Engineer?";
 
-        const html1 = wrapLetters(hText1, 0, 'hero-gradient-text');
+        // Slower speed for heading: 1s duration, 0.05s stagger
+        const html1 = wrapLetters(hText1, 0, 'hero-gradient-text', "1s", 0.05);
         // Add length of first part to start index of second part so delay continues smoothly
-        const html2 = wrapLetters(hText2, hText1.length, 'hero-gradient-text');
+        const html2 = wrapLetters(hText2, hText1.length, 'hero-gradient-text', "1s", 0.05);
 
         heading.innerHTML = html1 + '<br />' + html2;
         heading.style.opacity = '1';
     }
 
-    // Animate Paragraph
+    // Animate Paragraph (Turbo Fast)
     if (paragraph) {
         const lines = [
             "If you know how to read and write in English",
@@ -194,7 +194,8 @@ function initHeroAnimations() {
         const baseDelay = 30; // ~0.9s if * 0.03
 
         const htmlConfig = lines.map((line, index) => {
-            const wrappedLine = wrapLetters(line, baseDelay + charCount, 'hero-white-text');
+            // Fast speed for paragraph: 0.1s duration, 0.005s stagger
+            const wrappedLine = wrapLetters(line, baseDelay + charCount, 'hero-white-text', "0.1s", 0.005);
             charCount += line.length;
             return `<span class="hero-line-block">${wrappedLine}</span>`;
         }).join('');
@@ -233,8 +234,8 @@ function initGSAPAnimations() {
 
                 // Programs: 10 items
                 const desktopRanges = [
-                    [0, 35], [8, 43], [16, 51], [24, 59], [32, 67],
-                    [40, 75], [48, 83], [56, 91], [64, 99], [72, 107]
+                    [-8, 32], [0, 40], [8, 48], [16, 56], [24, 64],
+                    [32, 72], [40, 80], [48, 88], [56, 96], [64, 104]
                 ];
                 const mobileRanges = [
                     [0, 25], [8, 33], [16, 41], [24, 49], [32, 57],
@@ -318,8 +319,6 @@ function initCTAModal() {
 
             console.log("Animating CTA Text..."); // Debug
 
-            // Note: We use our custom robust class
-
             const text1 = "Talk To Our Career Experts ";
             const text2 = "To Help You Find A Suitable ";
             const text3 = "Career Path";
@@ -327,14 +326,15 @@ function initCTAModal() {
             // Helper to wrap letters
             const wrapLetters = (text, startIndex) => {
                 return text.split('').map((char, i) => {
-                    if (char === ' ') return '<span>&nbsp;</span>';
+                    // Use standard space but wrapped in span to maintain styling/opacity
+                    if (char === ' ') return `<span class="cta-gradient-text" style="display:inline-block; opacity: 0; animation-duration: 0.5s; animation-delay: ${(startIndex + i) * 0.03}s; animation-fill-mode: forwards;">&nbsp;</span>`;
+
                     // Use .cta-gradient-text which has specific background-clip properties
-                    return `<span class="cta-gradient-text animate__animated animate__fadeInLeft" style="display:inline-block; animation-duration: 0.5s; animation-delay: ${(startIndex + i) * 0.03}s;">${char}</span>`;
+                    return `<span class="cta-gradient-text animate__animated animate__fadeInLeft" style="opacity: 0; display:inline-block; animation-duration: 0.5s; animation-delay: ${(startIndex + i) * 0.03}s; animation-fill-mode: forwards;">${char}</span>`;
                 }).join('');
             };
 
             heading.innerHTML = wrapLetters(text1, 0) + '<br />' + wrapLetters(text2, text1.length) + '<br />' + wrapLetters(text3, text1.length + text2.length);
-            heading.dataset.animated = 'true';
             heading.style.opacity = '1'; // Make visible after setup
         };
 
@@ -362,7 +362,6 @@ function initCTAModal() {
                 console.log("CTA Button Clicked"); // Debug
                 modal.style.display = 'flex';
                 document.body.style.overflow = 'hidden';
-                // animateText(); // Removed: triggered by scroll now
             });
         });
 
@@ -401,6 +400,7 @@ function initCTAModal() {
         window.addEventListener('scroll', onFirstScroll);
     }
 }
+
 
 function initCarousel() {
     const trackContainers = document.querySelectorAll('.carousel-track-container');
@@ -681,5 +681,38 @@ function initCarousel() {
                 }
             });
         });
+    });
+}
+
+function initTestimonialAnimations() {
+    const heading = document.getElementById('testimonial-heading-anim');
+    if (!heading) return;
+
+    // Animation Helper (Same as CTA)
+    const wrapLetters = (text, startIndex) => {
+        return text.split('').map((char, i) => {
+            if (char === ' ') return '<span>&nbsp;</span>';
+            return `<span class="cta-gradient-text animate__animated animate__fadeInLeft" style="opacity: 0; display:inline-block; animation-duration: 0.5s; animation-delay: ${(startIndex + i) * 0.03}s; animation-fill-mode: forwards;">${char}</span>`;
+        }).join('');
+    };
+
+    const animateText = () => {
+        if (heading.dataset.animated === 'true') return;
+
+        console.log("Animating Testimonial Text...");
+        const text = "Hear From Our Students";
+        heading.innerHTML = wrapLetters(text, 0);
+        heading.dataset.animated = 'true';
+        heading.style.opacity = '1';
+    };
+
+    // Use GSAP ScrollTrigger for reliable "on scroll" execution
+    gsap.registerPlugin(ScrollTrigger);
+
+    ScrollTrigger.create({
+        trigger: heading,
+        start: "top 80%", // Trigger when top of heading hits 80% viewport height
+        onEnter: () => animateText(),
+        once: true // Animate only once
     });
 }

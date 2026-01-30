@@ -109,7 +109,7 @@
 /* Vertical Divider */
 #roadmap-content .vertical-divider {
     width: 2px;
-    height: 100px;
+    height: 60px;
     background: linear-gradient(to bottom, #1E468C, #AA87FA);
     margin: 0 auto 2rem;
 }
