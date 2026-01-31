@@ -55,6 +55,9 @@
 
 
 .indicator {
+    -webkit-transition: width 0.4s cubic-bezier(0.7, 0, 0.3, 1), background 0.4s, border-radius 0.4s;
+    -moz-transition: width 0.4s cubic-bezier(0.7, 0, 0.3, 1), background 0.4s, border-radius 0.4s;
+    -o-transition: width 0.4s cubic-bezier(0.7, 0, 0.3, 1), background 0.4s, border-radius 0.4s;
     transition: width 0.4s cubic-bezier(0.7, 0, 0.3, 1), background 0.4s, border-radius 0.4s;
 }
 
@@ -1275,8 +1278,10 @@ select {
 .hero-gradient-text {
     background: linear-gradient(90deg, #1E468C, #AA87FA) !important;
     -webkit-background-clip: text !important;
+    -moz-background-clip: text !important;
     background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
+    -moz-text-fill-color: transparent !important;
     color: transparent !important;
     display: inline-block !important;
     /* Required for transform */

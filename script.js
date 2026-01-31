@@ -1,9 +1,42 @@
 // Webflow touch check
 !function (o, c) { var n = c.documentElement, t = " w-mod-"; n.className += t + "js", ("ontouchstart" in o || o.DocumentTouch && c instanceof DocumentTouch) && (n.className += t + "touch") }(window, document);
 
+// ========================================
+// Browser Compatibility & Feature Detection
+// ========================================
+
+// Polyfill for NodeList.forEach (IE11, older Safari)
+if (window.NodeList && !NodeList.prototype.forEach) {
+    NodeList.prototype.forEach = Array.prototype.forEach;
+}
+
+// Polyfill for Element.closest (IE11)
+if (!Element.prototype.matches) {
+    Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
+}
+
+if (!Element.prototype.closest) {
+    Element.prototype.closest = function (s) {
+        var el = this;
+        do {
+            if (Element.prototype.matches.call(el, s)) return el;
+            el = el.parentElement || el.parentNode;
+        } while (el !== null && el.nodeType === 1);
+        return null;
+    };
+}
+
+// Feature detection for IntersectionObserver
+var hasIntersectionObserver = 'IntersectionObserver' in window;
+if (!hasIntersectionObserver) {
+    console.warn('IntersectionObserver not supported - some animations may not work');
+}
+
 // Ensure GSAP plugins are registered
 if (typeof gsap !== 'undefined') {
     gsap.registerPlugin(ScrollTrigger);
+} else {
+    console.error('GSAP library not loaded - animations will not work');
 }
 
 document.addEventListener("DOMContentLoaded", () => {
