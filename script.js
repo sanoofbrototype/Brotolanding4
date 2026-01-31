@@ -344,13 +344,25 @@ function initCTAModal() {
 
             console.log("Animating CTA Text (GSAP)...");
 
-            const text1 = "Talk To Our Career Experts ";
-            const text2 = "To Help You Find A Suitable ";
-            const text3 = "Career Path";
+            // Split into more granular parts for responsive wrapping
+            const t1a = "Talk To Our Career";
+            const t1b = "Experts";
+            const t2a = "To Help You Find";
+            const t2b = "A Suitable";
+            const t3 = "Career Path";
 
-            heading.innerHTML = wrapLetters(text1, { className: 'cta-gradient-text' }) +
-                '<br />' + wrapLetters(text2, { className: 'cta-gradient-text' }) +
-                '<br />' + wrapLetters(text3, { className: 'cta-gradient-text' });
+            // Construct the heading with global <br /> and mobile-only <br class="mobile-break" />
+            // Regular spaces are placed strategically so desktop looks correct.
+            heading.innerHTML =
+                wrapLetters(t1a, { className: 'cta-gradient-text' }) +
+                ' <br class="mobile-break" />' +
+                wrapLetters(t1b, { className: 'cta-gradient-text', startIndex: t1a.length }) +
+                '<br />' +
+                wrapLetters(t2a, { className: 'cta-gradient-text', startIndex: t1a.length + t1b.length }) +
+                ' <br class="mobile-break" />' +
+                wrapLetters(t2b, { className: 'cta-gradient-text', startIndex: t1a.length + t1b.length + t2a.length }) +
+                '<br />' +
+                wrapLetters(t3, { className: 'cta-gradient-text', startIndex: t1a.length + t1b.length + t2a.length + t2b.length });
 
             heading.style.opacity = '1';
 
@@ -724,8 +736,17 @@ function initTestimonialAnimations() {
         if (heading.dataset.animated === 'true') return;
 
         console.log("Animating Testimonial Text (GSAP)...");
-        const text = "Hear From Our Students";
-        heading.innerHTML = wrapLetters(text, { className: 'cta-gradient-text' });
+        // Create the two parts
+        const part1 = "Hear From Our";
+        const part2 = "Students";
+
+        // Add a line break that only shows on mobile. 
+        // We put the space BEFORE the break so desktop has it, but mobile line 2 starts flush.
+        heading.innerHTML = wrapLetters(part1, { className: 'cta-gradient-text' }) +
+            ' ' +
+            '<br class="mobile-break" />' +
+            wrapLetters(part2, { className: 'cta-gradient-text', startIndex: part1.length + 1 });
+
         heading.style.visibility = 'visible'; // Reveal the container
 
         const letters = heading.querySelectorAll('.cta-gradient-text');
