@@ -288,7 +288,7 @@ select {
     }
 
     .video-placeholder {
-        height: 400vh;
+        height: 120vh;
     }
 }
 
@@ -1270,18 +1270,6 @@ select {
     overflow: hidden;
 }
 
-/* Robust Gradient Text Class for Animation */
-.cta-gradient-text {
-    background: linear-gradient(90deg, #1E468C, #AA87FA) !important;
-    -webkit-background-clip: text !important;
-    background-clip: text !important;
-    -webkit-text-fill-color: transparent !important;
-    color: transparent !important;
-    display: inline-block !important;
-    /* Required for transform */
-    background-size: 200% auto !important;
-    /* Ensure gradient covers animation */
-}
 
 /* Hero Text Animation Classes */
 .hero-gradient-text {
@@ -1370,6 +1358,23 @@ select {
 /* Utility for mobile-only line breaks */
 .mobile-break {
     display: none;
+}
+
+/* Reduce height of portfolio items in graphic wrapper */
+.section-portfolio .graphic-wrapper .portfolio-card {
+    padding: 1rem !important;
+    min-height: auto !important;
+    gap: 0.5rem !important;
+}
+
+.section-portfolio .graphic-wrapper .item {
+    height: 540px !important;
+}
+
+@media screen and (max-width: 991px) {
+    .section-portfolio .graphic-wrapper .item {
+        margin-top: 5rem !important;
+    }
 }
 
 @media screen and (max-width: 767px) {

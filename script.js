@@ -30,6 +30,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // --- Feature Functions ---
 
+/**
+ * Shared helper to wrap text into spans for letter-by-letter animation.
+ */
+function wrapLetters(text, options = {}) {
+    const {
+        className = '',
+        startIndex = 0,
+        stagger = 0.03,
+        duration = "0.5s",
+        useAnimateCSS = false,
+        useNormalSpace = false
+    } = options;
+
+    return text.split('').map((char, i) => {
+        if (char === ' ') return useNormalSpace ? ' ' : '<span>&nbsp;</span>';
+        const delay = (startIndex + i) * stagger;
+        const style = `opacity: 0; display:inline-block; ${useAnimateCSS ? `animation-duration: ${duration}; animation-delay: ${delay}s; animation-fill-mode: forwards;` : ""}`;
+        const classes = `${className} ${useAnimateCSS ? "animate__animated animate__fadeInLeft" : ""}`.trim();
+        return `<span class="${classes}" style="${style}">${char}</span>`;
+    }).join('');
+}
+
 function initRoadmapAnimations() {
     gsap.registerPlugin(ScrollTrigger);
 
@@ -39,6 +61,18 @@ function initRoadmapAnimations() {
     }
 
     // Only select effects actually used in HTML
+
+    // ScrollTrigger for "Life at Brocamp" Heading
+    ScrollTrigger.create({
+        trigger: ".roadmap-hero .hero-heading",
+        start: "top 80%", // Trigger when top of element hits 80% viewport
+        onEnter: () => {
+            const heading = document.querySelector(".roadmap-hero .hero-heading");
+            if (heading) heading.classList.add("flip-scale-2-ver-left");
+        },
+        once: true
+    });
+
     const type2 = [...document.querySelectorAll("[data-splitting][data-effect2]")];
     const type3 = [...document.querySelectorAll("[data-splitting][data-effect3]")];
     const type4 = [...document.querySelectorAll("[data-splitting][data-effect4]")];
@@ -157,23 +191,14 @@ function initHeroAnimations() {
     const heading = document.getElementById('hero-heading-anim');
     const paragraph = document.getElementById('hero-paragraph-anim');
 
-    // Helper: Wrap letters with configurable animation timing
-    const wrapLetters = (text, startIndex, className, duration = "0.5s", stagger = 0.03) => {
-        return text.split('').map((char, i) => {
-            if (char === ' ') return ' '; // Use normal space for natural wrapping
-            return `<span class="${className} animate__animated animate__fadeInLeft" style="animation-duration: ${duration}; animation-delay: ${(startIndex + i) * stagger}s;">${char}</span>`;
-        }).join('');
-    };
-
     // Animate Heading (Slower)
     if (heading) {
         const hText1 = "Become a Software";
         const hText2 = " Engineer?";
 
         // Slower speed for heading: 1s duration, 0.05s stagger
-        const html1 = wrapLetters(hText1, 0, 'hero-gradient-text', "1s", 0.05);
-        // Add length of first part to start index of second part so delay continues smoothly
-        const html2 = wrapLetters(hText2, hText1.length, 'hero-gradient-text', "1s", 0.05);
+        const html1 = wrapLetters(hText1, { className: 'hero-gradient-text', duration: "1s", stagger: 0.05, useAnimateCSS: true, useNormalSpace: true });
+        const html2 = wrapLetters(hText2, { startIndex: hText1.length, className: 'hero-gradient-text', duration: "1s", stagger: 0.05, useAnimateCSS: true, useNormalSpace: true });
 
         heading.innerHTML = html1 + '<br />' + html2;
         heading.style.opacity = '1';
@@ -195,7 +220,7 @@ function initHeroAnimations() {
 
         const htmlConfig = lines.map((line, index) => {
             // Fast speed for paragraph: 0.1s duration, 0.005s stagger
-            const wrappedLine = wrapLetters(line, baseDelay + charCount, 'hero-white-text', "0.1s", 0.005);
+            const wrappedLine = wrapLetters(line, { startIndex: baseDelay + charCount, className: 'hero-white-text', duration: "0.1s", stagger: 0.005, useAnimateCSS: true, useNormalSpace: true });
             charCount += line.length;
             return `<span class="hero-line-block">${wrappedLine}</span>`;
         }).join('');
@@ -234,12 +259,12 @@ function initGSAPAnimations() {
 
                 // Programs: 10 items
                 const desktopRanges = [
-                    [-8, 32], [0, 40], [8, 48], [16, 56], [24, 64],
-                    [32, 72], [40, 80], [48, 88], [56, 96], [64, 104]
+                    [-9.5, 30.5], [-1.5, 38.5], [6.5, 46.5], [14.5, 54.5], [22.5, 62.5],
+                    [30.5, 70.5], [38.5, 78.5], [46.5, 86.5], [54.5, 94.5], [62.5, 102.5]
                 ];
                 const mobileRanges = [
-                    [0, 25], [8, 33], [16, 41], [24, 49], [32, 57],
-                    [40, 65], [48, 73], [56, 81], [64, 89], [72, 97]
+                    [-5, 20], [3, 28], [11, 36], [19, 44], [27, 52],
+                    [35, 60], [43, 68], [51, 76], [59, 84], [67, 92]
                 ];
                 const ranges = isMobile ? mobileRanges : desktopRanges;
 
@@ -312,30 +337,37 @@ function initCTAModal() {
     const form = document.getElementById('career-path-form');
 
     if (modal && triggerBtns.length > 0 && closeBtn) {
-        // Animation Helper
+        // Animation Logic (GSAP)
         const animateText = () => {
             const heading = document.getElementById('cta-text-animated');
             if (!heading || heading.dataset.animated === 'true') return;
 
-            console.log("Animating CTA Text..."); // Debug
+            console.log("Animating CTA Text (GSAP)...");
 
             const text1 = "Talk To Our Career Experts ";
             const text2 = "To Help You Find A Suitable ";
             const text3 = "Career Path";
 
-            // Helper to wrap letters
-            const wrapLetters = (text, startIndex) => {
-                return text.split('').map((char, i) => {
-                    // Use standard space but wrapped in span to maintain styling/opacity
-                    if (char === ' ') return `<span class="cta-gradient-text" style="display:inline-block; opacity: 0; animation-duration: 0.5s; animation-delay: ${(startIndex + i) * 0.03}s; animation-fill-mode: forwards;">&nbsp;</span>`;
+            heading.innerHTML = wrapLetters(text1, { className: 'cta-gradient-text' }) +
+                '<br />' + wrapLetters(text2, { className: 'cta-gradient-text' }) +
+                '<br />' + wrapLetters(text3, { className: 'cta-gradient-text' });
 
-                    // Use .cta-gradient-text which has specific background-clip properties
-                    return `<span class="cta-gradient-text animate__animated animate__fadeInLeft" style="opacity: 0; display:inline-block; animation-duration: 0.5s; animation-delay: ${(startIndex + i) * 0.03}s; animation-fill-mode: forwards;">${char}</span>`;
-                }).join('');
-            };
+            heading.style.opacity = '1';
 
-            heading.innerHTML = wrapLetters(text1, 0) + '<br />' + wrapLetters(text2, text1.length) + '<br />' + wrapLetters(text3, text1.length + text2.length);
-            heading.style.opacity = '1'; // Make visible after setup
+            const letters = heading.querySelectorAll('.cta-gradient-text');
+            gsap.fromTo(letters,
+                { opacity: 0, x: -20 },
+                {
+                    opacity: 1,
+                    x: 0,
+                    duration: 0.5,
+                    stagger: 0.02,
+                    ease: "power2.out",
+                    onComplete: () => {
+                        heading.dataset.animated = 'true';
+                    }
+                }
+            );
         };
 
         // Initialize Animation Trigger (Scroll)
@@ -688,22 +720,29 @@ function initTestimonialAnimations() {
     const heading = document.getElementById('testimonial-heading-anim');
     if (!heading) return;
 
-    // Animation Helper (Same as CTA)
-    const wrapLetters = (text, startIndex) => {
-        return text.split('').map((char, i) => {
-            if (char === ' ') return '<span>&nbsp;</span>';
-            return `<span class="cta-gradient-text animate__animated animate__fadeInLeft" style="opacity: 0; display:inline-block; animation-duration: 0.5s; animation-delay: ${(startIndex + i) * 0.03}s; animation-fill-mode: forwards;">${char}</span>`;
-        }).join('');
-    };
-
     const animateText = () => {
         if (heading.dataset.animated === 'true') return;
 
-        console.log("Animating Testimonial Text...");
+        console.log("Animating Testimonial Text (GSAP)...");
         const text = "Hear From Our Students";
-        heading.innerHTML = wrapLetters(text, 0);
-        heading.dataset.animated = 'true';
-        heading.style.opacity = '1';
+        heading.innerHTML = wrapLetters(text, { className: 'cta-gradient-text' });
+        heading.style.visibility = 'visible'; // Reveal the container
+
+        const letters = heading.querySelectorAll('.cta-gradient-text');
+
+        gsap.fromTo(letters,
+            { opacity: 0, x: -20 },
+            {
+                opacity: 1,
+                x: 0,
+                duration: 0.8,
+                stagger: 0.03,
+                ease: "power2.out",
+                onComplete: () => {
+                    heading.dataset.animated = 'true';
+                }
+            }
+        );
     };
 
     // Use GSAP ScrollTrigger for reliable "on scroll" execution
@@ -711,8 +750,8 @@ function initTestimonialAnimations() {
 
     ScrollTrigger.create({
         trigger: heading,
-        start: "top 80%", // Trigger when top of heading hits 80% viewport height
+        start: "top 85%",
         onEnter: () => animateText(),
-        once: true // Animate only once
+        once: true
     });
 }
