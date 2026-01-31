@@ -89,6 +89,37 @@ function wrapLetters(text, options = {}) {
     }).join('');
 }
 
+/**
+ * Initialize CTA Modal functionality
+ */
+function initCTAModal() {
+    const modal = document.getElementById('cta-modal');
+    const closeBtn = document.querySelector('.close-modal');
+
+    if (!modal) return;
+
+    // Close modal when clicking the X button
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+    }
+
+    // Close modal when clicking outside the modal content
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+
+    // Close modal on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.style.display === 'flex') {
+            modal.style.display = 'none';
+        }
+    });
+}
+
 function initRoadmapAnimations() {
     gsap.registerPlugin(ScrollTrigger);
 
