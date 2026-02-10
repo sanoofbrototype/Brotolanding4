@@ -131,15 +131,16 @@ function initRoadmapAnimations() {
     // Only select effects actually used in HTML
 
     // ScrollTrigger for "Life at Brocamp" Heading
-    ScrollTrigger.create({
-        trigger: ".roadmap-hero .hero-heading",
-        start: "top 80%", // Trigger when top of element hits 80% viewport
-        onEnter: () => {
-            const heading = document.querySelector(".roadmap-hero .hero-heading");
-            if (heading) heading.classList.add("flip-scale-2-ver-left");
-        },
-        once: true
-    });
+    // ScrollTrigger for "Life at Brocamp" Heading - REMOVED per user request
+    // ScrollTrigger.create({
+    //     trigger: ".roadmap-hero .hero-heading",
+    //     start: "top 80%", // Trigger when top of element hits 80% viewport
+    //     onEnter: () => {
+    //         const heading = document.querySelector(".roadmap-hero .hero-heading");
+    //         if (heading) heading.classList.add("flip-scale-2-ver-left");
+    //     },
+    //     once: true
+    // });
 
     const type2 = [...document.querySelectorAll("[data-splitting][data-effect2]")];
     const type3 = [...document.querySelectorAll("[data-splitting][data-effect3]")];
