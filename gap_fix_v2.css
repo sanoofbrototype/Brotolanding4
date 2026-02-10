@@ -1,0 +1,21 @@
+/* Further reduce gap between testimonials and CTA */
+.section-testimonials {
+    padding-bottom: 0rem !important;
+    margin-bottom: 0rem !important;
+}
+
+.section-cta {
+    margin-top: 0rem !important;
+    padding-top: 0rem !important;
+}
+
+.section-cta .padding-section-large {
+    padding-top: 0rem !important;
+    margin-top: 0rem !important;
+}
+
+.cta-wrap {
+    margin-top: 0rem !important;
+    padding-top: 1rem !important;
+    /* Keep slight padding for aesthetics but minimize gap */
+}

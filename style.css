@@ -625,6 +625,8 @@ select {
 /* Add gap between clients and portfolio */
 .section-portfolio {
     margin-top: 0rem;
+    margin-bottom: 4rem !important;
+    /* Added small gap below portfolio */
 }
 
 .padding-section-medium.is-portfolio {
@@ -649,7 +651,7 @@ select {
 
 /* Testimonials Section */
 .section-testimonials {
-    padding-bottom: 5rem;
+    padding-bottom: 2rem;
 }
 
 /* Custom Carousel Styles (Ported from Brototypelanding) */
@@ -1560,4 +1562,163 @@ select {
         align-items: flex-start;
         gap: 16px;
     }
+}
+
+/* Reduce gap between testimonials and CTA */
+.section-testimonials {
+    padding-bottom: 2rem !important;
+}
+
+.section-cta .padding-section-large {
+    padding-top: 2rem !important;
+}
+
+/* Further reduce gap between testimonials and CTA */
+.section-testimonials {
+    padding-bottom: 0rem !important;
+    margin-bottom: 0rem !important;
+}
+
+.section-cta {
+    margin-top: 0rem !important;
+    padding-top: 0rem !important;
+}
+
+.section-cta .padding-section-large {
+    padding-top: 0rem !important;
+    margin-top: 0rem !important;
+}
+
+.cta-wrap {
+    margin-top: 0rem !important;
+    padding-top: 1rem !important;
+    /* Keep slight padding for aesthetics but minimize gap */
+}
+
+/* Further reduce gap between testimonials and CTA - STAGE 3 */
+.section-testimonials {
+    padding-bottom: 0rem !important;
+    margin-bottom: 0rem !important;
+}
+
+.section-testimonials .padding-section-large {
+    padding-bottom: 0rem !important;
+    margin-bottom: 0rem !important;
+}
+
+.section-cta {
+    margin-top: 0rem !important;
+    padding-top: 0rem !important;
+}
+
+.section-cta .padding-section-large {
+    padding-top: 0rem !important;
+    margin-top: 0rem !important;
+}
+
+.cta-wrap {
+    margin-top: 0rem !important;
+    padding-top: 0rem !important;
+}
+
+/* Final Gap Fix - Override padding-global vertical padding */
+.section-testimonials .padding-global {
+    padding-top: 0rem !important;
+    padding-bottom: 0rem !important;
+}
+
+.section-cta .padding-global {
+    padding-top: 0rem !important;
+    padding-bottom: 0rem !important;
+}
+
+.section-testimonials .padding-section-large {
+    padding-top: 0rem !important;
+    padding-bottom: 0rem !important;
+    margin-bottom: 0rem !important;
+    margin-top: 0rem !important;
+}
+
+.section-cta .padding-section-large {
+    padding-top: 0rem !important;
+    padding-bottom: 0rem !important;
+    margin-top: 0rem !important;
+    margin-bottom: 0rem !important;
+}
+
+.section-cta .cta-wrap h2 {
+    margin-top: 0rem !important;
+    padding-top: 0rem !important;
+}
+
+.section-testimonials .section-testimonials-wrap {
+    margin-bottom: 0rem !important;
+    padding-bottom: 0rem !important;
+}
+
+.section-cta {
+    margin-top: -1px !important;
+    /* Force overlap slightly to remove hairline */
+    padding-top: 0rem !important;
+}
+
+/* AGGRESSIVE GAP FIXER */
+.section-testimonials {
+    padding-bottom: 0rem !important;
+    margin-bottom: 0rem !important;
+}
+
+/* Remove bottom margin from carousel container */
+.carousel-container {
+    margin-bottom: 0rem !important;
+}
+
+/* Pull CTA down more for larger gap */
+.section-cta {
+    margin-top: 8rem !important;
+    padding-top: 0rem !important;
+    position: relative;
+    z-index: 10;
+}
+
+.section-cta .padding-section-large {
+    padding-top: 0rem !important;
+    margin-top: 0rem !important;
+}
+
+.cta-wrap {
+    padding-top: 1rem !important;
+    /* Just enough space for text not to hit border */
+    margin-top: 0rem !important;
+}
+
+/* Resize padding-section-large in testimonials only */
+.section-testimonials .padding-section-large {
+    max-width: 1330px !important;
+    width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+/* WhatsApp Floating Button */
+.whatsapp-float {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 1000;
+    background-color: #25d366;
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.1);
+    color: white;
 }

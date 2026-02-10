@@ -1,0 +1,8 @@
+/* Reduce gap between testimonials and CTA */
+.section-testimonials {
+    padding-bottom: 2rem !important;
+}
+
+.section-cta .padding-section-large {
+    padding-top: 2rem !important;
+}
